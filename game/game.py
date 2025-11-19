@@ -19,7 +19,7 @@ class Game:
         self.current_state = 'splash' 
         
         # Initialisation des écrans
-        self.splash = SplashScreen() # <--- Instanciation
+        self.splash = SplashScreen()
         self.main_menu = MainMenu(self.screen)
         self.credits = None 
         self.game_over = GameOver()

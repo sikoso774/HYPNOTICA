@@ -1,4 +1,5 @@
 from ..config.settings import *
+from ..config.support import *
 from ..components.sprites.sprites import Player, Phone
 from ..components.elements.satiety import Satiety
 from ..components.sprites.sprites import Background
@@ -22,6 +23,7 @@ class GamePlay:
         # 2. Initialisation des éléments
         self.all_sprites = AllSprites()
         self.satiety_bar = Satiety()
+        self.music = pygame.mixer.music.load(get_resource_path(join(AUDIO_DIR, "Max Brhon - AI [NCS Release].mp3")))
         
         # Background
         self.background = Background(self.all_sprites, self.screen) 
@@ -79,11 +81,9 @@ class GamePlay:
         self.satiety_bar.draw(self.screen)
 
     def run(self):
-        try:
-            if pygame.mixer.music.get_busy():
-                pygame.mixer.music.play(-1)
-        except pygame.error as e:
-            print(f"Echec du chargment de la musique : {e}")
+        pygame.mixer.music.play(-1)
+        # except pygame.error as e:
+        #     print(f"Echec du chargment de la musique : {e}")
         """
         Démarre et gère la boucle de jeu principale.
         Retourne True si le jeu doit être relancé, False sinon.
