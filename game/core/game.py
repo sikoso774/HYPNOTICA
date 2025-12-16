@@ -5,7 +5,7 @@ from ..components.elements.satiety import Satiety
 from ..components.sprites.sprites import Background
 from ..components.sprites.groups import AllSprites
 
-class GamePlay:
+class Game:
     _is_pygame_initialized_by_us = False
 
     def __init__(self):
@@ -41,7 +41,7 @@ class GamePlay:
             if event.type == pygame.QUIT:
                 self.running = False
                 # Quitte pygame et le système si ce module l'a initialisé
-                if GamePlay._is_pygame_initialized_by_us:
+                if Game._is_pygame_initialized_by_us:
                     pygame.quit()
                 sys.exit()  # Quitte l'application
 
@@ -94,7 +94,7 @@ class GamePlay:
                 if event.type == pygame.QUIT:
                     self.running = False
                 # Quitte pygame et le système si ce module l'a initialisé
-                if GamePlay._is_pygame_initialized_by_us:
+                if Game._is_pygame_initialized_by_us:
                     pygame.quit()
                     sys.exit()  # Quitte l'application
                 elif event.type == pygame.KEYDOWN:
@@ -115,7 +115,7 @@ class GamePlay:
 
 # --- Bloc de test pour l'exécution indépendante (optionnel) ---
 if __name__ == "__main__":
-    game_instance = GamePlay()
+    game_instance = Game()
     result = game_instance.run()
     if result == "game_over":
         print("Game Over! Satiété à zéro.")

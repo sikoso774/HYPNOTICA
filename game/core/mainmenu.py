@@ -1,110 +1,63 @@
-# Fichier ecran_titre_logic.py
 from ..config.settings import *
 from ..config.support import *
 from ..constants.mainmenu_const import *
 from ..components.elements.mainmenu_button import Bouton
 from ..components.sprites.hypnose_gif import Animation_GIF
 from ..config.utils import display_text_center as center_text
+from .base_screen import BaseScreen  # Import de la classe mère
 
-
-class MainMenu:
-    """ Main menu screen class.
-
-    Args:
-    screen (pygame.Surface): The main display surface.
-    """
-    _is_pygame_initialized_by_us = False
-
-    def __init__(self, screen):# Prend maintenant l'écran en paramètre
-        """ Initialize main menu screen elements.
-        Args:
-        screen (pygame.Surface): The main display surface."""
+class MainMenu(BaseScreen):
+    def __init__(self, game):
+        super().__init__(game)
+        self.music_name = 'menu'  # Référence à la clé dans SoundHandler
         
-        # 1. Screen
-        self.screen = screen
-        self.width = screen.get_width()
-        self.height = screen.get_height()
-    
-        # 2. Assets (GIF)
+        # 1. Assets (GIF)
         GIF_PATH = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
         self.gif_animator = Animation_GIF(GIF_PATH, self.screen)
-        self.animation_frame = self.gif_animator.animation_frame
-
-        # 3. Buttons
-        self.buttons = []
-        for bouton_data in BUTTONS_MENU: # Utilise la liste complète et fiable
-            x = self.width // 2 - BUTTON_WITDH // 2
-            y = bouton_data['y_offset'] 
-            
-            self.buttons.append(
-                Bouton(x, y,BUTTON_WITDH, BUTTON_HEIGHT, bouton_data['text'], bouton_data['action'])
-            )
         
-        # 4 Music
-        self.music_path = get_resource_path(join(AUDIO_DIR, "Max Brhon - AI [NCS Release].mp3"))
+        # 2. Boutons
+        self.buttons = []
+        # On centre les boutons par rapport à la largeur de l'écran
+        center_x = self.screen.get_width() // 2 - BUTTON_WITDH // 2
+        
+        for bouton_data in BUTTONS_MENU:
+            self.buttons.append(
+                Bouton(center_x, bouton_data['y_offset'], BUTTON_WITDH, BUTTON_HEIGHT, 
+                       bouton_data['text'], bouton_data['action'])
+            )
 
-        return None
-    
-    def _manage_interactions(self, event):
+    def on_event(self, event):
+        # Gestion des clics sur les boutons
         for button in self.buttons:
             action = button.manage_event(event)
             if action:
+                self.sound.play_sfx('click') # Petit bonus : son de clic !
                 return action
-
-    def _draw(self):
         
+        # Raccourci clavier (Q pour quitter)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            self.quit_game()
+            
+        return None
+
+    def update(self):
+        # Mise à jour de l'animation GIF à chaque frame
+        self.gif_animator.animate()
+
+    def draw(self):
+        # 1. Fond (GIF)
         frame_index = self.gif_animator.animation_frame
         self.screen.blit(self.gif_animator.frames[frame_index], (0, 0))
-        center_text(self.screen, "HYPNOTICA", COLORS['white'], self.height // 4,
-                              font_path=get_resource_path(DEFAULT_FONT_NAME))
-        center_text(self.screen, "Zoléni KOKOLO ZASSI - 2025", COLORS['white'], self.height// 4 + 50, font_size=28)
+        
+        # 2. Textes
+        center_text(self.screen, "HYPNOTICA", COLORS['white'], self.screen.get_height() // 4,
+                    font_path=get_resource_path(DEFAULT_FONT_NAME))
+        center_text(self.screen, "Zoléni KOKOLO ZASSI - 2025", COLORS['white'], 
+                    self.screen.get_height() // 4 + 50, font_size=28)
+        
+        # 3. Boutons
         for button in self.buttons:
-            button.dessiner(self.screen, self.gif_animator.frames[self.animation_frame])
-
-
-    # --- La méthode run est la boucle principale pour cet état ---
-    def run(self) -> None:
-        
-        try:
-            pygame.mixer.music.load(self.music_path)
-            pygame.mixer.music.play(-1)
-        except pygame.error as e:
-            print(f"Erreur de lecture de la musique du titre: {e}")
-        
-        clock = pygame.time.Clock()
-        running = True
-        while running:
-            
-            # Gestion des événements
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.mixer.music.stop()
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                    pygame.mixer.music.stop()
-                    pygame.quit()
-                    sys.exit()
-                
-                # Gestion des interactions des boutons
-                action = self._manage_interactions(event)
-                if action:
-                    pygame.mixer.music.stop()
-                    # Retourne l'action demandée par le bouton (ex: 'game', 'credits', 'quit')
-                    return action 
-            
-            # Animation
-            self.gif_animator.animate()
-            
-            # drawing
-            self._draw()
-
-            # update
-            pygame.display.update()
-            clock.tick(FPS)
-            
-        return None 
-    
+            button.draw(self.screen, self.gif_animator.frames[frame_index])
 
 # Test rapide pour vérifier si l'écran titre fonctionne indépendamment
 if __name__ == "__main__":

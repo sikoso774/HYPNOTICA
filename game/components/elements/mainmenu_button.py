@@ -35,7 +35,7 @@ class Bouton:
         self.police = get_font(None, None)
         
 
-    def dessiner(self, surface, gif_image=None): 
+    def draw(self, surface, gif_image=None): 
         """Dessine le bouton et gère l'état de survol."""
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):

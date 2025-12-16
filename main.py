@@ -1,5 +1,97 @@
-from game.game import Game
+import random
+import pygame as pg
+from game.core.sound import Sound
+from game.config.settings import *
+from game.core.game import *
+from game.core.credits import *
+from game.core.mainmenu import *
+from game.core.game_over import *
+from game.core.instructions import *
+from game.core.intro import *
 
-if __name__ == "__main__":
-    game = Game()
-    game.run()
+class App:
+    def __init__(self):
+        pg.init()
+        self.screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pg.display.set_caption(GAME_TITLE)
+        self.clock = pg.time.Clock()
+        self.sound = Sound(self)
+        # self.running = True
+        self.current_state = 'start'
+        self.action = None
+        
+        # Screen Initialization
+        self.init_screens()
+    
+    def check_events(self):
+        for event in pg.event.get():
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                pg.quit()
+                sys.exit()
+    
+    def init_screens(self):
+        self.introduction = Intro(self)
+        self.main_menu = MainMenu(self)
+        self.credits = None 
+        self.game_over = GameOver(self)
+        self.instruction = Instructions(self)
+    
+    def handle_action(self, action):
+        
+        if self.current_state == 'start':
+            action = self.introduction.run() 
+            
+        elif self.current_state == 'menu':
+            action = self.main_menu.run()
+            
+        elif self.current_state == 'credits':
+            if self.credits is None: # Petite correction de nom ici (self.credits vs credits_screen)
+                self.credits = Credits(self)
+            else: return
+            action = self.credits.run()
+                
+        elif self.current_state == 'game':
+            self.game = Game()
+            action = self.game.run()
+            print("Début du jeu...")
+              
+        elif self.current_state == 'instruction':
+            action = self.instruction.run()
+        elif self.current_state == 'game_over':
+            action = self.game_over.run() # Correction nom variable (ecran_game_over -> game_over)
+        else:
+            action = 'quit'
+        
+        return action
+    
+    def handle_current_state(self):
+        if self.action == 'menu':
+            self.current_state = 'menu'
+        elif self.action == 'game':
+            self.current_state = 'game'   
+        elif self.action == 'credits':
+            self.current_state = 'credits'   
+        elif self.action == 'instructions':
+            self.current_state = 'instruction' 
+        elif self.action == "game_over":
+            self.current_state = 'game_over'
+            self.credits = None 
+        elif self.action == 'restart': # Gérer le restart depuis game over
+                self.current_state = 'game'        
+        elif self.action == 'quit':
+            self.running = False
+        
+        return self.current_state
+    
+    def update(self):
+        self.action = self.handle_action(self.action)
+        self.current_state = self.handle_current_state()
+        
+    def run(self):
+        while True:
+            self.check_events()
+            self.update()
+    
+if __name__ == '__main__':
+    app = App()
+    app.run()

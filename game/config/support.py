@@ -1,22 +1,20 @@
+import os
 import sys
-# import pygame
-from .settings import *
+from os.path import join
+from .settings import WINDOW_WIDTH, WINDOW_HEIGHT
 
-
-def get_resource_path(relative_path) -> str:
-    """Obtenir le chemin absolu vers une ressource, en fonction du chemin relatif fourni.
-    Utile pour accéder aux ressources dans différents environnements (dev et PyInstaller).
-    Args:
-        relative_path (str): Le chemin relatif vers la ressource.
-    Returns:
-        str: Le chemin absolu vers la ressource.
+def get_resource_path(relative_path):
+    """
+    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
+    (si l'exe est compilé) et le développement standard.
     """
     try:
-        # PyInstaller crée une variable temporaire _MEIPASS
+        # PyInstaller crée un dossier temporaire et stocke le chemin dans _MEIPASS
         base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = abspath(".")
-    return join(base_path, relative_path)
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def folder_importer(*path) -> dict:
@@ -31,7 +29,7 @@ def folder_importer(*path) -> dict:
     
     folder_dict = {}
 
-    for folder_path, _, file_names in walk(join(*path)):
+    for folder_path, _, file_names in os.walk(join(*path)):
         for file_name in file_names:
             # On génère la clé (nom sans l'extension)
             key = file_name.split('.')[0]
@@ -51,7 +49,7 @@ def audio_importer(*path) -> dict:
         dict: Un dictionnaire avec les chemins absolus vers les fichiers audio.
     """
     audio_dict = {}
-    for folder_path, _, file_names in walk(join(*path)):
+    for folder_path, _, file_names in os.walk(os.path.join(*path)):
         for file_name in file_names:
             key = file_name.split('.')[0]
             absolute_path = get_resource_path(join(folder_path, file_name))

@@ -29,3 +29,4 @@ __pycache__/
 # Autres fihiers
 *.docx
 *.xlsx
+generate_tree.py
