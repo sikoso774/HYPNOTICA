@@ -4,7 +4,7 @@ from os.path import join
 from ..config.settings import *
 from ..config.support import get_resource_path
 
-class SplashScreen:
+class LunchGame:
     def __init__(self, game):
         self.game = game
         self.screen = self.game.screen
@@ -100,7 +100,7 @@ class SplashScreen:
             running_phase = True
             while running_phase:
                 for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
+                    if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                         pygame.quit()
                         sys.exit()
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
