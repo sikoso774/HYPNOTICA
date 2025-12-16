@@ -1,4 +1,5 @@
 import random
+import pygame as pg
 from .config.settings import *
 from .core.gameplay import GamePlay
 from .core.credits import Credits
@@ -9,17 +10,20 @@ from .core.start import SplashScreen
 
 class Game:
     def __init__(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        pygame.display.set_caption(GAME_TITLE)
-        self.clock = pygame.time.Clock()
+        pg.init()
+        self.screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pg.display.set_caption(GAME_TITLE)
+        self.clock = pg.time.Clock()
         self.running = True
         
         # État initial : on commence par le splash screen !
         self.current_state = 'splash' 
         
         # Initialisation des écrans
-        self.splash = SplashScreen()
+        self.init_screens()
+    
+    def init_screens(self):
+        self.splash = SplashScreen(self)
         self.main_menu = MainMenu(self.screen)
         self.credits = None 
         self.game_over = GameOver()
@@ -37,7 +41,7 @@ class Game:
                 
             elif self.current_state == 'credits':
                 if self.credits is None: # Petite correction de nom ici (self.credits vs credits_screen)
-                    self.credits = Credits(self.screen)
+                    self.credits = Credits(self)
                 action = self.credits.run()
                 
             elif self.current_state == 'game':
@@ -71,4 +75,5 @@ class Game:
             elif action == 'quit':
                 self.running = False
         
-        pygame.quit()
+        pg.quit()
+        sys.exit()

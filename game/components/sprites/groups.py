@@ -1,10 +1,11 @@
+import pygame as pg
 from ...config.settings import *
 
 # 1. On hérite de LayeredUpdates pour gérer l'ordre d'affichage
-class AllSprites(pygame.sprite.LayeredUpdates):
+class AllSprites(pg.sprite.LayeredUpdates):
     def __init__(self):
         super().__init__()
-        self.screen = pygame.display.get_surface()
+        self.screen = pg.display.get_surface()
     
     def draw(self):
         # On nettoie l'écran (optionnel si le background couvre tout, mais sécurisant)
