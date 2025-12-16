@@ -3,9 +3,10 @@ from ..config.support import *
 from ..config.settings import *
 
 class Credits:
-    def __init__(self, screen):
+    def __init__(self, game):
         # general setup
-        self.screen = screen
+        self.game = game
+        self.screen = self.game.screen
         self.credit_data = CREDITS_CONTENT
         self.loaded_images = self._load_images()
         self.clock = pygame.time.Clock()

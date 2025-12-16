@@ -5,8 +5,9 @@ from ..config.settings import *
 from ..config.support import get_resource_path
 
 class SplashScreen:
-    def __init__(self):
-        self.screen = pygame.display.get_surface()
+    def __init__(self, game):
+        self.game = game
+        self.screen = self.game.screen
         self.clock = pygame.time.Clock()
 
         self.DURATION = 3000 
