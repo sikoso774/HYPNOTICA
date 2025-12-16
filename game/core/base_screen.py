@@ -14,7 +14,7 @@ class BaseScreen:
     def handle_events(self):
         """Gestionnaire d'événements de base."""
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.quit_game()
             
             # Hook pour les classes enfants (ex: appuie sur une touche)

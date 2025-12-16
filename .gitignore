@@ -22,6 +22,7 @@ desktop.ini
 # --- Dépendances (Si c'est un projet Node.js, Python, Unity...) ---
 node_modules/
 __pycache__/
+others/
 *.pyc
 *.env
 .idea/

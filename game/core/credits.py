@@ -1,3 +1,4 @@
+# Fichier: game/core/credits.py
 from ..constants.credits_const import *
 from ..config.support import *
 from ..config.settings import *
@@ -11,20 +12,29 @@ class Credits(BaseScreen):
         self.credit_data = CREDITS_CONTENT
         self.scrolling_speed = 1.5
         
-        # Préparation du contenu (texte et images)
+        # Préparation du contenu
         self.prepare_credits = self._prepare_credits()
         
-        # Calcul de la hauteur totale pour le scrolling
+        # Calcul de la hauteur
         _, self.screen_h = self.screen.get_size()
         self.total_height = sum(item['height'] for item in self.prepare_credits) + self.screen_h * 0.1
         
-        # Position de départ (en bas de l'écran)
+        # Initialisation de la variable (sera reset dans run)
         self.credits_y = self.screen_h
 
+    # --- AJOUTEZ CETTE MÉTHODE ICI ---
+    def run(self):
+        """
+        Surcharge de run() : 
+        On remet le texte en bas de l'écran avant de lancer la boucle.
+        """
+        self.credits_y = self.screen_h  # RESET : Retour au départ
+        return super().run()            # Lancement standard (boucle + musique)
+    # ---------------------------------
+
+    # ... Le reste des méthodes (_load_images, _prepare_credits, on_event, update, draw) reste identique ...
     def _load_images(self) -> dict:
-        # (Gardez votre méthode _load_images existante telle quelle)
-        # ... [Code original _load_images] ...
-        # Pour gagner de la place ici, je ne la réécris pas, mais copiez-la depuis votre fichier original.
+        # [Votre code existant...]
         loaded_images = {}
         for item in CREDITS_CONTENT:
             if item['type'] == 'image' and 'image_path' in item:
@@ -39,18 +49,21 @@ class Credits(BaseScreen):
         return loaded_images
 
     def _prepare_credits(self):
-        # (Gardez aussi votre méthode _prepare_credits existante)
-        # ... [Code original _prepare_credits] ...
-        # Juste une correction : utilisez self.screen pour récupérer la largeur si besoin
+        # [Votre code existant...]
         prepared_list = []
         loaded_images = self._load_images()
-        font_path = get_resource_path(DEFAULT_FONT_NAME)
+        font_path = get_resource_path(DEFAULT_FONT_NAME) # Assurez-vous d'utiliser get_resource_path
         
         for item in self.credit_data:
+            # ... (Copiez le contenu de votre fonction existante) ...
             prepared_item = {'type': item['type']}
             if item['type'] == 'text':
                 font_size = item.get('font_size', 36)
-                current_font = pygame.font.Font(font_path, font_size)
+                try:
+                    current_font = pygame.font.Font(font_path, font_size)
+                except:
+                    current_font = pygame.font.Font(None, font_size)
+
                 text_surf = current_font.render(item['value'], True, item.get('color', COLORS['white']))
                 prepared_item['surface'] = text_surf
                 prepared_item['height'] = text_surf.get_height() * 1.5
@@ -70,26 +83,31 @@ class Credits(BaseScreen):
 
     def on_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_m:
-                self.sound.stop_music()
+            # Touche M ou ESC pour revenir au menu
+            if event.key == pygame.K_m or event.key == pygame.K_ESCAPE:
+                self.sound.play_sfx('click')
                 return "menu"
             elif event.key == pygame.K_q:
                 self.quit_game()
         return None
 
     def update(self):
-        # Logique de défilement
         self.credits_y -= self.scrolling_speed
+        # Si tout est passé, on peut soit boucler, soit revenir au menu automatiquement
         if self.credits_y < -self.total_height:
-            self.credits_y = self.screen_h  # Reset pour boucler
+             # Option A : Boucle infinie
+             self.credits_y = self.screen_h 
+             
+             # Option B : Retour automatique au menu (décommentez ci-dessous)
+             # return "menu"
 
     def draw(self):
         self.screen.fill(COLORS['black'])
         y_offset = self.credits_y
         
+        center_x = self.screen.get_width() // 2
+        
         for item in self.prepare_credits:
-            center_x = self.screen.get_width() // 2
-            
             if item['type'] == 'text':
                 text_surf = item['surface']
                 text_rect = text_surf.get_rect(center=(center_x, y_offset))
@@ -98,7 +116,6 @@ class Credits(BaseScreen):
                 
             elif item['type'] == 'image':
                 image = item['surface']
-                # Centrage vertical ajusté
                 image_rect = image.get_rect(center=(center_x, y_offset + image.get_height() // 2))
                 self.screen.blit(image, image_rect)
                 y_offset += item['height']

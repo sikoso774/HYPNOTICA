@@ -88,3 +88,5 @@ class Instructions(BaseScreen):
                     surf = item['font'].render(text_to_render, True, item['color'])
                     rect = surf.get_rect(center=(WINDOW_WIDTH // 2, item['y']))
                     self.screen.blit(surf, rect)
+    
+    

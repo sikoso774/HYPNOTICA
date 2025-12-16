@@ -17,6 +17,7 @@ class Sound:
             'menu': "Max Brhon - AI [NCS Release].mp3",
             'game_over': "More Plastic - Rewind [NCS Release].mp3",
             'credits': "waera - harinezumi [NCS Release].mp3",
+            'game': "DEAF KEV - Invincible [NCS Release].mp3"
             # Ajoutez d'autres pistes ici si nécessaire
         }
         
