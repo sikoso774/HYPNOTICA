@@ -10,7 +10,7 @@ from game.core.game_over import GameOver
 from game.core.credits import Credits
 from game.core.mainmenu import MainMenu
 from game.core.instructions import Instructions
-from game.core.start import Intro
+from game.core.intro import Intro
 from game.core.level import Level
 
 class Debugger:

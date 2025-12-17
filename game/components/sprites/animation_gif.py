@@ -19,7 +19,7 @@ class Animation_GIF:
         frames = []
         
         # walk parcourt les dossiers et fichiers
-        for root, _, files in walk(self.folder_path):
+        for root, _, files in os.walk(self.folder_path):
             sorted_files = sorted(files) 
             
             for file_name in sorted_files:

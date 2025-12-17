@@ -1,5 +1,5 @@
 import pygame as pg
-from ..constants.credits_const import *
+from ..components.constants.credits_const import *
 from ..config.utils import *
 from ..config.settings import *
 from .base_screen import BaseScreen

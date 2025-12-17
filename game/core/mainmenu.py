@@ -1,9 +1,9 @@
 import pygame as pg
 from ..config.settings import *
 from ..config.utils import display_text_center as center_text, get_resource_path
-from ..constants.mainmenu_const import *
+from ..components.constants.mainmenu_const import *
 from ..components.elements.mainmenu_button import Bouton
-from ..components.sprites.hypnose_gif import Animation_GIF
+from ..components.sprites.animation_gif import Animation_GIF
 from .base_screen import BaseScreen  # Import de la classe mère
 
 class MainMenu(BaseScreen):

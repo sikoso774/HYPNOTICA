@@ -1,8 +1,8 @@
 import pygame as pg
 import random
 from ...config.settings import *
-from ...constants.gameplay_const import *
-from .hypnose_gif import Animation_GIF, HYPNOSE_FOLDER_NAME
+from ...config.utils import get_resource_path
+from .animation_gif import Animation_GIF, HYPNOSE_FOLDER_NAME
 
 class Sprite(pg.sprite.Sprite):
     def __init__(self, pos, surf, groups):
@@ -65,7 +65,7 @@ class Player(Sprite):
             centerx=WINDOW_WIDTH / 2,
             bottom = WINDOW_HEIGHT - 20
         )
-        self.direction = pygame.math.Vector2()
+        self.direction = pg.math.Vector2()
 
     # Si il n'y a pas de sprites...
     def paceholder(self, player_size):

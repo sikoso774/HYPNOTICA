@@ -1,4 +1,4 @@
-from ..config.settings import *
+from ...config.settings import COLORS
 
 # Contenu des instructions
 

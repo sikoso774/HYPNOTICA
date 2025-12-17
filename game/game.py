@@ -4,7 +4,7 @@ from .config.settings import *
 from .core.sound import Sound
 
 # Import des écrans
-from .core.start import Intro
+from .core.intro import Intro
 from .core.mainmenu import MainMenu
 from .core.game_over import GameOver
 from .core.instructions import Instructions
@@ -45,9 +45,9 @@ class Game:
                 
             elif self.current_state == 'menu':
                 action = self.main_menu.run()
-                
-            elif self.current_state == 'instruction':
-                action = self.instruction.run()
+            
+            elif self.current_state == 'instructions':
+                    action = self.instruction.run()
                 
             elif self.current_state == 'credits':
                 action = self.credits.run()

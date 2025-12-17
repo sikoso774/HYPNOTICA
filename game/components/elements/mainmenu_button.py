@@ -1,6 +1,6 @@
 from ...config.settings import *
 from ...config.utils import get_font, get_resource_path # Pour obtenir l'objet police
-from ...constants.mainmenu_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
+from ..constants.mainmenu_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
 
 import pygame
 
@@ -11,8 +11,8 @@ class Bouton:
     # SOUND_HOVER = audio_importer(SOUND_DIR)[SOUND_HOVER_FILE]
     
     # Si je ne veux voir aucun problème avec PyInstaller...
-    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(SOUND_DIR, SOUND_CLICK_FILE +'.wav')))
-    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(SOUND_DIR, SOUND_HOVER_FILE +'.wav')))
+    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', SOUND_CLICK_FILE +'.wav')))
+    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', SOUND_HOVER_FILE +'.wav')))
 
     # Police doit être chargée ici ou passée en paramètre. 
     # Le mieux est de la charger ici avec get_font().

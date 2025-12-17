@@ -1,8 +1,6 @@
 import pygame as pg
 from ...config.settings import *
-from ...constants.gameplay_const import (
-    SATIETY_START, SATIETY_DECREASE_RATE, SATIETY_INCREASE_AMOUNT,
-)
+
 class Satiety:
     def __init__(self):
         if not pg.font.get_init():
