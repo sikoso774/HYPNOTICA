@@ -1,8 +1,23 @@
+import os
+import sys
+import pygame as pg
 from .settings import * 
-from .support import get_resource_path
 
 # Cache pour stocker les objets police
 _font_cache = {}
+
+def get_resource_path(relative_path):
+    """
+    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
+    (si l'exe est compilé) et le développement standard.
+    """
+    try:
+        # PyInstaller crée un dossier temporaire et stocke le chemin dans _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def get_font(font_path, size):
     """Charge ou récupère une police depuis un cache."""
@@ -14,10 +29,10 @@ def get_font(font_path, size):
     if font_key not in _font_cache:
         try:
             abs_font_path = get_resource_path(final_font_path)
-            _font_cache[font_key] = pygame.font.Font(abs_font_path, final_font_size)
+            _font_cache[font_key] = pg.font.Font(abs_font_path, final_font_size)
         except Exception as e:
             print(f"Erreur de chargement de la police: {e}")
-            _font_cache[font_key] = pygame.font.SysFont(None, final_font_size) 
+            _font_cache[font_key] = pg.font.SysFont(None, final_font_size) 
 
     return _font_cache[font_key]
 
@@ -32,3 +47,16 @@ def display_text_center(surface, text, color, y, font_path=None, font_size=None)
     text_surf = police_font.render(text, True, color)
     texte_rect = text_surf.get_rect(center=(WINDOW_WIDTH // 2, y)) 
     surface.blit(text_surf, texte_rect)
+
+def get_resource_path(relative_path):
+    """
+    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
+    (si l'exe est compilé) et le développement standard.
+    """
+    try:
+        # PyInstaller crée un dossier temporaire et stocke le chemin dans _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)

@@ -1,9 +1,9 @@
+import pygame as pg
 from ..config.settings import *
-from ..config.support import *
+from ..config.utils import display_text_center as center_text, get_resource_path
 from ..constants.mainmenu_const import *
 from ..components.elements.mainmenu_button import Bouton
 from ..components.sprites.hypnose_gif import Animation_GIF
-from ..config.utils import display_text_center as center_text
 from .base_screen import BaseScreen  # Import de la classe mère
 
 class MainMenu(BaseScreen):
@@ -35,7 +35,7 @@ class MainMenu(BaseScreen):
                 return action
         
         # Raccourci clavier (Q pour quitter)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+        if event.type == pg.KEYDOWN and event.key == pg.K_q:
             self.quit_game()
             
         return None
@@ -58,11 +58,3 @@ class MainMenu(BaseScreen):
         # 3. Boutons
         for button in self.buttons:
             button.draw(self.screen, self.gif_animator.frames[frame_index])
-
-# Test rapide pour vérifier si l'écran titre fonctionne indépendamment
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    titre = MainMenu(screen)
-    titre.run()
-    pygame.quit()

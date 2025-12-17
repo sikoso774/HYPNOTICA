@@ -1,7 +1,7 @@
 import pygame
 # On importe les constantes globales de la configuration centrale
 from ..config.settings import *
-from ..config.support import get_resource_path # On garde get_resource_path
+from ..config.utils import get_resource_path # On garde get_resource_path
 
 # --- Dimensions de l'écran (maintenant importées de settings.py) ---
 LARGEUR_ECRAN_JEU = WINDOW_WIDTH

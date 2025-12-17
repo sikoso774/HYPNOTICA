@@ -1,7 +1,7 @@
-import pygame
+import pygame as pg
 from os.path import join
 from ..config.settings import *
-from ..config.support import get_resource_path
+from ..config.utils import get_resource_path
 from .base_screen import BaseScreen
 
 class Intro(BaseScreen):
@@ -36,17 +36,17 @@ class Intro(BaseScreen):
     def _init_fonts(self):
         font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
         try:
-            self.font_logo = pygame.font.Font(font_path, 48)
-            self.font_dev = pygame.font.Font(font_path, 36)
+            self.font_logo = pg.font.Font(font_path, 48)
+            self.font_dev = pg.font.Font(font_path, 36)
         except Exception:
-            self.font_logo = pygame.font.Font(None, 48)
-            self.font_dev = pygame.font.Font(None, 36)
+            self.font_logo = pg.font.Font(None, 48)
+            self.font_dev = pg.font.Font(None, 36)
 
     def _load_images(self, data):
         for filename, (fx, fy) in data:
             try:
                 path = get_resource_path(join("assets", "images", filename))
-                img = pygame.image.load(path).convert_alpha()
+                img = pg.image.load(path).convert_alpha()
                 
                 # Redimensionnement proportionnel
                 target_w = int(WINDOW_WIDTH * fx)
@@ -55,29 +55,29 @@ class Intro(BaseScreen):
                 ratio = min(target_w / img_w, target_h / img_h)
                 new_size = (int(img_w * ratio), int(img_h * ratio))
                 
-                img = pygame.transform.scale(img, new_size)
+                img = pg.transform.scale(img, new_size)
                 self.images.append(img)
             except Exception as e:
                 print(f"Erreur chargement image intro {filename}: {e}")
 
     def run(self):
         """Surcharge de run pour initialiser le timer au démarrage."""
-        self.phase_start_time = pygame.time.get_ticks()
+        self.phase_start_time = pg.time.get_ticks()
         self.image_index = 0
         # On appelle le run du parent qui gère la boucle principale
         return super().run()
 
     def on_event(self, event):
         # Permet de passer l'intro avec Espace ou echap
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE or event.key == pg.K_ESCAPE:
                 self.sound.play_sfx('confirm')
                 return "menu"
         return None
 
     def update(self):
         """Gère la logique temporelle de l'intro."""
-        current_time = pygame.time.get_ticks()
+        current_time = pg.time.get_ticks()
         elapsed = current_time - self.phase_start_time
 
         # Si le temps de l'image actuelle est écoulé
@@ -103,7 +103,7 @@ class Intro(BaseScreen):
         self.screen.fill(COLORS['black'])
         
         current_img = self.images[self.image_index]
-        elapsed = pygame.time.get_ticks() - self.phase_start_time
+        elapsed = pg.time.get_ticks() - self.phase_start_time
         
         # 1. Calcul Alpha Image (Fade In / Static / Fade Out)
         alpha_img = 255

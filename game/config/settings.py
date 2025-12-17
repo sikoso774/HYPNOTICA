@@ -1,6 +1,3 @@
-import pygame
-import sys
-import random
 from os.path import dirname, abspath, join
 from os import walk # Utile pour l'import des ressources
 

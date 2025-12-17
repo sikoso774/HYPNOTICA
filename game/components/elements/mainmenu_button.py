@@ -1,7 +1,6 @@
 from ...config.settings import *
-from ...config.utils import get_font # Pour obtenir l'objet police
+from ...config.utils import get_font, get_resource_path # Pour obtenir l'objet police
 from ...constants.mainmenu_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
-from ...config.support import *
 
 import pygame
 

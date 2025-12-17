@@ -30,4 +30,6 @@ others/
 # Autres fihiers
 *.docx
 *.xlsx
-generate_tree.py
+
+# Fichier de débogage
+debug.py

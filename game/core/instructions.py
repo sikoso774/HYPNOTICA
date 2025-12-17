@@ -1,3 +1,4 @@
+import pygame as pg
 from os.path import join
 from ..config.settings import *
 from ..config.support import get_resource_path
@@ -19,7 +20,7 @@ class Instructions(BaseScreen):
         self._prepare_content()
         
         # Reset pour l'animation au démarrage
-        self.last_char_time = pygame.time.get_ticks()
+        self.last_char_time = pg.time.get_ticks()
 
     def _prepare_content(self):
         # (Même logique que votre code original, adaptée légèrement)
@@ -29,18 +30,18 @@ class Instructions(BaseScreen):
         
         # Création d'une police par défaut si besoin
         try:
-            default_font = pygame.font.Font(font_path, 30)
+            default_font = pg.font.Font(font_path, 30)
         except Exception:
-            default_font = pygame.font.Font(None, 30)
+            default_font = pg.font.Font(None, 30)
 
         for item in self.instruction_data:
             if item['type'] == 'text':
                 size = item.get('font-size', 30)
                 # On tente de charger la font à la bonne taille, sinon fallback
                 try:
-                    font = pygame.font.Font(font_path, size)
+                    font = pg.font.Font(font_path, size)
                 except:
-                    font = pygame.font.Font(None, size)
+                    font = pg.font.Font(None, size)
                 
                 self.prepared_items.append({
                     'type': 'text',
@@ -57,19 +58,19 @@ class Instructions(BaseScreen):
                 current_y += item.get('height', 20)
 
     def on_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_SPACE:
                 # Si l'animation n'est pas finie, on l'accélère
                 if self.current_char_index < self.total_chars:
                     self.current_char_index = self.total_chars
                 else:
                     return "menu"
-            elif event.key == pygame.K_ESCAPE:
+            elif event.key == pg.K_ESCAPE:
                 return "menu"
         return None
 
     def update(self):
-        current_time = pygame.time.get_ticks()
+        current_time = pg.time.get_ticks()
         if self.current_char_index < self.total_chars:
             if current_time - self.last_char_time > self.typing_speed:
                 self.current_char_index += 1

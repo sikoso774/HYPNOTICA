@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 from .base_screen import BaseScreen
 from ..components.sprites.sprites import Player, Phone, Background
 from ..components.elements.satiety import Satiety

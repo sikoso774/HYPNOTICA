@@ -1,6 +1,6 @@
-import pygame
+import pygame as pg
 from ...config.settings import *
-from ...config.support import get_resource_path
+from ...config.utils import get_resource_path
 
 class TextScroller:
     def __init__(self):
@@ -10,9 +10,9 @@ class TextScroller:
         # Chargement de la police
         font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
         try:
-            self.font = pygame.font.Font(font_path, 24)
+            self.font = pg.font.Font(font_path, 24)
         except FileNotFoundError:
-            self.font = pygame.font.Font(None, 24)
+            self.font = pg.font.Font(None, 24)
 
         # Liste du texte à afficher
         self.text_list = [

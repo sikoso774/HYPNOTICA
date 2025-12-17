@@ -1,5 +1,3 @@
-# Fichier main_menu_content.py
-
 from ..config.settings import COLORS, WINDOW_HEIGHT, join
 
 # --- CONFIGURATION DES BOUTONS ---

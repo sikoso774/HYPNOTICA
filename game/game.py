@@ -14,9 +14,9 @@ from .core.level import Level # Nouvelle classe (ex-GamePlay)
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pg.display.set_caption("Deep Hypnotica")
-        self.clock = pygame.time.Clock()
+        self.clock = pg.time.Clock()
         
         # 1. Gestionnaire de son centralisé
         self.sound = Sound(self)
@@ -67,5 +67,5 @@ class Game:
                 self.current_state = action # Changement d'état (ex: "menu" -> "game")
 
     def quit_app(self):
-        pygame.quit()
+        pg.quit()
         sys.exit()

@@ -1,3 +1,4 @@
+import pygame as pg
 from ...config.settings import * 
 
 HYPNOSE_FOLDER_NAME = "hypnose_frames"
@@ -28,20 +29,20 @@ class Animation_GIF:
                         full_path = join(root, file_name)
                         
                         # Charger et convertir l'image (optimisation pour Pygame)
-                        img = pygame.image.load(full_path).convert() 
+                        img = pg.image.load(full_path).convert() 
                         
                         # Redimensionner l'image à la taille de l'écran si nécessaire
-                        img = pygame.transform.scale(img, (self.screen.get_width(), self.screen.get_height()))
+                        img = pg.transform.scale(img, (self.screen.get_width(), self.screen.get_height()))
                         
                         frames.append(img)
-                    except pygame.error as e:
+                    except pg.error as e:
                         print(f"Erreur de chargement de la frame GIF '{file_name}': {e}")
             
             # Si le dossier est vide, cette liste sera vide, ce qui cause la KeyError
             if not frames:
                 print(f"ALERTE : Aucune image trouvée dans le dossier GIF : {folder_path}")
                 # Créez une surface noire de secours pour éviter le crash
-                placeholder = pygame.Surface((WINDOW_HEIGHT, WINDOW_HEIGHT))
+                placeholder = pg.Surface((WINDOW_HEIGHT, WINDOW_HEIGHT))
                 placeholder.fill(COLORS['black'])
                 frames.append(placeholder)
                 

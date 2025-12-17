@@ -1,6 +1,6 @@
-# Fichier: game/core/credits.py
+import pygame as pg
 from ..constants.credits_const import *
-from ..config.support import *
+from ..config.utils import *
 from ..config.settings import *
 from .base_screen import BaseScreen
 
@@ -39,13 +39,13 @@ class Credits(BaseScreen):
         for item in CREDITS_CONTENT:
             if item['type'] == 'image' and 'image_path' in item:
                 try:
-                    img = pygame.image.load(item['image_path']).convert_alpha()
+                    img = pg.image.load(item['image_path']).convert_alpha()
                     scaled_width = int(WINDOW_WIDTH * item.get('image_scale_factor', 1))
                     scaled_height = int(WINDOW_HEIGHT * item.get('image_scale_factor', 1))
-                    img = pygame.transform.scale(img, (scaled_width, scaled_height))
+                    img = pg.transform.scale(img, (scaled_width, scaled_height))
                     loaded_images[item['value']] = img
-                except pygame.error:
-                    loaded_images[item['value']] = pygame.Surface((1, 1))
+                except pg.error:
+                    loaded_images[item['value']] = pg.Surface((1, 1))
         return loaded_images
 
     def _prepare_credits(self):
@@ -60,9 +60,9 @@ class Credits(BaseScreen):
             if item['type'] == 'text':
                 font_size = item.get('font_size', 36)
                 try:
-                    current_font = pygame.font.Font(font_path, font_size)
+                    current_font = pg.font.Font(font_path, font_size)
                 except:
-                    current_font = pygame.font.Font(None, font_size)
+                    current_font = pg.font.Font(None, font_size)
 
                 text_surf = current_font.render(item['value'], True, item.get('color', COLORS['white']))
                 prepared_item['surface'] = text_surf
@@ -73,7 +73,7 @@ class Credits(BaseScreen):
                     prepared_item['surface'] = image
                     prepared_item['height'] = image.get_height() + 20
                 else:
-                    prepared_item['surface'] = pygame.Surface((1, 1))
+                    prepared_item['surface'] = pg.Surface((1, 1))
                     prepared_item['height'] = 0
             elif item['type'] == 'spacer':
                 prepared_item['height'] = item.get('height', 0)
@@ -82,12 +82,12 @@ class Credits(BaseScreen):
         return prepared_list
 
     def on_event(self, event):
-        if event.type == pygame.KEYDOWN:
+        if event.type == pg.KEYDOWN:
             # Touche M ou ESC pour revenir au menu
-            if event.key == pygame.K_m or event.key == pygame.K_ESCAPE:
+            if event.key == pg.K_m or event.key == pg.K_ESCAPE:
                 self.sound.play_sfx('click')
                 return "menu"
-            elif event.key == pygame.K_q:
+            elif event.key == pg.K_q:
                 self.quit_game()
         return None
 

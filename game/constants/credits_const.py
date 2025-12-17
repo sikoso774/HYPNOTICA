@@ -1,4 +1,4 @@
-from ..config.support import image_importer
+
 from ..config.settings import *
 from ..config.support import *
 

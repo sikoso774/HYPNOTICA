@@ -1,5 +1,5 @@
 # Fichier: game/core/base_screen.py
-import pygame
+import pygame as pg
 import sys
 from ..config.settings import *
 
@@ -8,13 +8,13 @@ class BaseScreen:
         self.game = game
         self.screen = game.screen  # Accès direct à l'écran via l'objet Game
         self.sound = game.sound    # Accès au gestionnaire de son
-        self.clock = pygame.time.Clock()
+        self.clock = pg.time.Clock()
         self.running = True
 
     def handle_events(self):
         """Gestionnaire d'événements de base."""
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+        for event in pg.event.get():
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 self.quit_game()
             
             # Hook pour les classes enfants (ex: appuie sur une touche)
@@ -36,7 +36,7 @@ class BaseScreen:
         pass
 
     def quit_game(self):
-        pygame.quit()
+        pg.quit()
         sys.exit()
 
     def run(self):
@@ -56,6 +56,6 @@ class BaseScreen:
             # 3. Draw
             self.draw()
             
-            # 4. Flip
-            pygame.display.flip()
+            # 4. Update
+            pg.display.flip()
             self.clock.tick(FPS)

@@ -1,14 +1,16 @@
+import pygame as pg
+import random
 from ...config.settings import *
 from ...constants.gameplay_const import *
 from .hypnose_gif import Animation_GIF, HYPNOSE_FOLDER_NAME
 
-class Sprite(pygame.sprite.Sprite):
+class Sprite(pg.sprite.Sprite):
     def __init__(self, pos, surf, groups):
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_frect(topleft=pos)
         
-class Background(pygame.sprite.Sprite):
+class Background(pg.sprite.Sprite):
     """
     Classe de gestion de l'arrière-plan animé comme un Sprite.
     """
@@ -27,7 +29,7 @@ class Background(pygame.sprite.Sprite):
         if self.gif_animator.frames:
             self.image = self.gif_animator.frames[0]
         else:
-            self.image = pygame.Surface((screen.get_width(), screen.get_height()))
+            self.image = pg.Surface((screen.get_width(), screen.get_height()))
             self.image.fill(COLORS['black'])
             
         self.rect = self.image.get_frect(topleft=(0, 0))
@@ -47,7 +49,7 @@ class Player(Sprite):
     def __init__(self, groups):
         # Nous devons fournir pos et surf, même si Player les met à jour juste après.
         # Utilisez des valeurs temporaires ou des constantes ici.
-        TEMP_SURF = pygame.Surface((PLAYER_SIZE, PLAYER_SIZE))
+        TEMP_SURF = pg.Surface((PLAYER_SIZE, PLAYER_SIZE))
         TEMP_POS = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 20)
         
         # Passer les arguments au constructeur de Sprite
@@ -73,19 +75,19 @@ class Player(Sprite):
         """
         if PLAYER_SPRITE_PATH:
             try:
-                sprite = pygame.image.load(PLAYER_SPRITE_PATH).convert_alpha()
-                return pygame.transform.scale(sprite, (player_size, player_size))
-            except pygame.error as e:
+                sprite = pg.image.load(PLAYER_SPRITE_PATH).convert_alpha()
+                return pg.transform.scale(sprite, (player_size, player_size))
+            except pg.error as e:
                 print(f"Erreur de chargement du sprite joueur ({PLAYER_SPRITE_PATH}): {e}. Utilisation du placeholder.")
         # Placeholder: un carré bleu clair
-        placeholder = pygame.Surface((player_size, player_size), pygame.SRCALPHA)
+        placeholder = pg.Surface((player_size, player_size), pg.SRCALPHA)
         placeholder.fill((50, 50, 200)) # Bleu un peu plus clair
         return placeholder
     
     def input(self, dt):
-        keys = pygame.key.get_pressed()
-        self.direction.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])  # <---- bcp plus simple
-        self.direction.y = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+        keys = pg.key.get_pressed()
+        self.direction.x = int(keys[pg.K_RIGHT]) - int(keys[pg.K_LEFT])  # <---- bcp plus simple
+        self.direction.y = int(keys[pg.K_DOWN]) - int(keys[pg.K_UP])
         self.direction = self.direction.normalize() if self.direction else self.direction
         self.rect.center += self.direction * self.speed * dt
     
@@ -126,13 +128,13 @@ class Phone(Sprite):
         """
         if PHONE_SPRITE_PATH:
             try:
-                sprite = pygame.image.load(PHONE_SPRITE_PATH).convert_alpha()
-                return pygame.transform.scale(sprite, (phone_size, phone_size))
-            except pygame.error as e:
+                sprite = pg.image.load(PHONE_SPRITE_PATH).convert_alpha()
+                return pg.transform.scale(sprite, (phone_size, phone_size))
+            except pg.error as e:
                 print(f"Erreur de chargement du sprite téléphone ({PHONE_SPRITE_PATH}): {e}. Utilisation du placeholder.")
         # Placeholder: un cercle vert
-        placeholder = pygame.Surface((phone_size, phone_size), pygame.SRCALPHA)
-        pygame.draw.circle(placeholder, (0, 200, 0), (phone_size // 2, phone_size // 2), phone_size // 2)
+        placeholder = pg.Surface((phone_size, phone_size), pg.SRCALPHA)
+        pg.draw.circle(placeholder, (0, 200, 0), (phone_size // 2, phone_size // 2), phone_size // 2)
         return placeholder
 
     def reset_position(self):
