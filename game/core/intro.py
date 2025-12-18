@@ -49,8 +49,8 @@ class Intro(BaseScreen):
                 img = pg.image.load(path).convert_alpha()
                 
                 # Redimensionnement proportionnel
-                target_w = int(WINDOW_WIDTH * fx)
-                target_h = int(WINDOW_HEIGHT * fy)
+                target_w = int(WIDTH * fx)
+                target_h = int(HEIGHT * fy)
                 img_w, img_h = img.get_size()
                 ratio = min(target_w / img_w, target_h / img_h)
                 new_size = (int(img_w * ratio), int(img_h * ratio))
@@ -115,7 +115,7 @@ class Intro(BaseScreen):
 
         temp_img = current_img.copy()
         temp_img.set_alpha(alpha_img)
-        rect = temp_img.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+        rect = temp_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         self.screen.blit(temp_img, rect)
 
         # 2. Texte Logo (Fade In retardé)
@@ -126,7 +126,7 @@ class Intro(BaseScreen):
         
         surf_logo = self.font_logo.render(self.text_logo, True, COLORS['white'])
         surf_logo.set_alpha(alpha_txt1)
-        rect_logo = surf_logo.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 6))
+        rect_logo = surf_logo.get_rect(center=(WIDTH // 2, HEIGHT // 6))
         self.screen.blit(surf_logo, rect_logo)
 
         # 3. Texte Dev (Fade In encore plus retardé)
@@ -137,5 +137,5 @@ class Intro(BaseScreen):
             
         surf_dev = self.font_dev.render(self.text_dev, True, COLORS['white'])
         surf_dev.set_alpha(alpha_txt2)
-        rect_dev = surf_dev.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 100))
+        rect_dev = surf_dev.get_rect(center=(WIDTH // 2, HEIGHT - 100))
         self.screen.blit(surf_dev, rect_dev)

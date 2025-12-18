@@ -1,14 +1,9 @@
 import pygame as pg
+import math
 import random
 from ...config.settings import *
 from ...config.utils import get_resource_path
 from .animation_gif import Animation_GIF, HYPNOSE_FOLDER_NAME
-
-class Sprite(pg.sprite.Sprite):
-    def __init__(self, pos, surf, groups):
-        super().__init__(groups)
-        self.image = surf
-        self.rect = self.image.get_frect(topleft=pos)
         
 class Background(pg.sprite.Sprite):
     """
@@ -44,26 +39,33 @@ class Background(pg.sprite.Sprite):
         current_frame_index = self.gif_animator.animation_frame
         if self.gif_animator.frames:
             self.image = self.gif_animator.frames[current_frame_index]
-       
+
+
+class Sprite(pg.sprite.Sprite):
+    def __init__(self, pos, surf, groups):
+        super().__init__(groups)
+        self.image = surf
+        self.rect = self.image.get_frect(topleft=pos)
+
 class Player(Sprite):
     def __init__(self, groups):
         # Nous devons fournir pos et surf, même si Player les met à jour juste après.
         # Utilisez des valeurs temporaires ou des constantes ici.
-        TEMP_SURF = pg.Surface((PLAYER_SIZE, PLAYER_SIZE))
-        TEMP_POS = (WINDOW_WIDTH // 2, WINDOW_HEIGHT - 20)
+        temp_surf = pg.Surface((PLAYER_DATA['size'], PLAYER_DATA['size']))
+        temp_pos = (WIDTH // 2, HEIGHT - 20)
         
         # Passer les arguments au constructeur de Sprite
-        super().__init__(TEMP_POS, TEMP_SURF, groups) 
+        super().__init__(temp_pos, temp_surf, groups) 
         self._layer = 1
         
-        self.size = PLAYER_SIZE
-        self.speed = PLAYER_SPEED
+        self.size = PLAYER_DATA['size']
+        self.speed = PLAYER_DATA['speed']
         
         # Le code suivant va écraser TEMP_SURF et TEMP_POS, ce qui est acceptable.
         self.image = self.paceholder(self.size) 
         self.rect  = self.image.get_frect(
-            centerx=WINDOW_WIDTH / 2,
-            bottom = WINDOW_HEIGHT - 20
+            centerx= WIDTH / 2,
+            bottom = HEIGHT - 20
         )
         self.direction = pg.math.Vector2()
 
@@ -73,12 +75,13 @@ class Player(Sprite):
         Charge et redimensionne le sprite du joueur.
         Utilise un carré placeholder si PLAYER_SPRITE_PATH n'est pas défini.
         """
-        if PLAYER_SPRITE_PATH:
+        player_sprite_path = PLAYER_DATA['sprite_path']
+        if player_sprite_path:
             try:
-                sprite = pg.image.load(PLAYER_SPRITE_PATH).convert_alpha()
+                sprite = pg.image.load(player_sprite_path).convert_alpha()
                 return pg.transform.scale(sprite, (player_size, player_size))
             except pg.error as e:
-                print(f"Erreur de chargement du sprite joueur ({PLAYER_SPRITE_PATH}): {e}. Utilisation du placeholder.")
+                print(f"Erreur de chargement du sprite joueur ({player_sprite_path}): {e}. Utilisation du placeholder.")
         # Placeholder: un carré bleu clair
         placeholder = pg.Surface((player_size, player_size), pg.SRCALPHA)
         placeholder.fill((50, 50, 200)) # Bleu un peu plus clair
@@ -103,16 +106,16 @@ class Phone(Sprite):
         
         # 1. Préparation des arguments pour le parent (Sprite)
         # On utilise des valeurs temporaires car Phone calcule sa vraie position plus tard
-        temp_size = PHONE_SIZE
+        temp_size = PHONE_DATA['size']
         temp_surf = self.load_phone_sprite(temp_size) # On utilise une méthode locale pour charger l'image
-        temp_pos = (random.randint(0, WINDOW_WIDTH - temp_size), 0)
+        temp_pos = (random.randint(0,WIDTH - temp_size), 0)
 
         # 2. Appel au constructeur de la classe parente (Sprite)
         super().__init__(temp_pos, temp_surf, groups)
         
         self._layer = 1
         self.size = temp_size
-        self.speed = 200
+        self.speed = PHONE_DATA['speed']
         self.image = temp_surf
         # self.rect est déjà initialisé par Sprite.__init__
         
@@ -126,12 +129,13 @@ class Phone(Sprite):
         Charge et redimensionne le sprite du téléphone.
         Utilise un cercle placeholder si PHONE_SPRITE_PATH n'est pas défini.
         """
-        if PHONE_SPRITE_PATH:
+        phone_sprite_path = PHONE_DATA['sprite_path']
+        if phone_sprite_path:
             try:
-                sprite = pg.image.load(PHONE_SPRITE_PATH).convert_alpha()
+                sprite = pg.image.load(phone_sprite_path).convert_alpha()
                 return pg.transform.scale(sprite, (phone_size, phone_size))
             except pg.error as e:
-                print(f"Erreur de chargement du sprite téléphone ({PHONE_SPRITE_PATH}): {e}. Utilisation du placeholder.")
+                print(f"Erreur de chargement du sprite téléphone ({phone_sprite_path}): {e}. Utilisation du placeholder.")
         # Placeholder: un cercle vert
         placeholder = pg.Surface((phone_size, phone_size), pg.SRCALPHA)
         pg.draw.circle(placeholder, (0, 200, 0), (phone_size // 2, phone_size // 2), phone_size // 2)
@@ -142,17 +146,17 @@ class Phone(Sprite):
         Réinitialise la position du téléphone en haut de l'écran à une position X aléatoire.
         """
         # Utilisation de self.rect qui vient du parent
-        self.rect.x = random.randint(0, WINDOW_WIDTH - self.size)
+        self.rect.x = random.randint(0, WIDTH - self.size)
         self.rect.y = 0  # Commence en haut de l'écran
 
     def update(self, dt): # Prend dt pour être cohérent avec Player, même si non utilisé ici
         """
         Met à jour la position du téléphone (le fait tomber).
         """
-        self.rect.y += self.speed * dt
+        self.rect.y += self.speed * dt * GRAVITY
 
         # Si le téléphone sort de l'écran, le réinitialise
-        if self.rect.top > WINDOW_HEIGHT:
+        if self.rect.top > HEIGHT:
             self.reset_position()
         
     def draw(self, surface):
@@ -161,3 +165,43 @@ class Phone(Sprite):
         """
         surface.blit(self.image, self.rect)
 
+class RaycastPlayer:
+    def __init__(self, game):
+        self.game = game
+        self.x, self.y = (2.5, 2.5) # Position de départ sur la grille (ex: case 2,2)
+        self.angle = 0
+        
+    @property
+    def pos(self):
+        return (self.x, self.y)
+
+    def input(self):
+        keys = pg.key.get_pressed()
+        sin_a = math.sin(self.angle)
+        cos_a = math.cos(self.angle)
+        dx = 0
+        dy = 0
+        speed = PLAYER_DATA['speed']
+        rot_speed = PLAYER_ROT_SPEED * self.game.clock.get_time() # Indépendant du framerate
+
+        if keys[pg.K_LEFT]:
+            self.angle -= rot_speed
+        if keys[pg.K_RIGHT]:
+            self.angle += rot_speed
+            
+        if keys[pg.K_UP]:
+            dx += speed * cos_a
+            dy += speed * sin_a
+        if keys[pg.K_DOWN]:
+            dx -= speed * cos_a
+            dy -= speed * sin_a
+            
+        # Collision simple (check mur)
+        # Note : Il faudra affiner la collision pour ne pas traverser les murs en diagonale
+        if self.game.map.mini_map[int(self.y)][int(self.x + dx * 2)] == 0: # Check X
+            self.x += dx
+        if self.game.map.mini_map[int(self.y + dy * 2)][int(self.x)] == 0: # Check Y
+            self.y += dy
+
+    def update(self):
+        self.input()

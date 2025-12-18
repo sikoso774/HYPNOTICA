@@ -4,8 +4,8 @@ from ...config.utils import get_resource_path
 
 class TextScroller:
     def __init__(self):
-        self.width = WINDOW_WIDTH
-        self.height = WINDOW_HEIGHT
+        self.width = WIDTH
+        self.height = HEIGHT
         
         # Chargement de la police
         font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))

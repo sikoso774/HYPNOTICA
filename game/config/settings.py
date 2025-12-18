@@ -1,10 +1,11 @@
 # Fichier: game/config/settings.py
 import os
+import math
 from os.path import join
 
 # --- Configuration Fenêtre ---
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+WIDTH = 800
+HEIGHT = 600
 FPS = 60
 GAME_TITLE = "Deep Hypnotica"
 
@@ -24,46 +25,72 @@ COLORS = {
     'white': (255, 255, 255),
     'black': (0, 0, 0),
     'gray': (100, 100, 100),
-    
+        
     # RGB
     'red': (255, 0, 0),
     'green': (0, 255, 0),
     'blue': (0, 0, 255),
-    
+        
     # Secondary solors
     'cyan': (0, 255, 255),
     'magenta': (255, 0, 255),
     'yellow': (255, 255, 0),
-    
+        
     # Others colors
     'dark_gray': (50, 50, 50),
     'orange': (181, 83, 38),
     'purple': (127, 0, 255),
-    
+        
     # Personal colors
     'ui_text': (255, 255, 255),
     'ui_hover': (200, 200, 200),
 }
 
-# --- Gameplay & Physique (Ex-gameplay_const.py) ---
-PLAYER_SIZE = 50 
-PLAYER_SPEED = 300
-PHONE_SIZE = 30 
-PHONE_SPEED = 120
-GRAVITY = 9.8
+# --- Gameplay & Physique  ---
+GRAVITY = 0.8
 JUMP_STRENGTH = -15
-SATIETY_DECREASE_RATE = 10  # Vitesse de baisse de la faim
-SATIETY_MAX = 10
 
 # Player settings
-PLAYER_SPRITE_PATH = None 
-PHONE_SPRITE_PATH = None 
+PLAYER_DATA = {
+    'size': 50,
+    'speed': 300,
+    'sprite_path': None
+}
+PLAYER_ROT_SPEED = 0.002
+
+# Phone settings 
+PHONE_DATA = {
+    'size': 30,
+    'speed': 200,
+    'sprite_path': None
+}
+
 
 # Satiety settings
-SATIETY_START = 100.0
-SATIETY_DECREASE_RATE = 0.05
-SATIETY_INCREASE_AMOUNT = 10
+SATIETY_DATA = {
+    'start': 100.0,
+    'decrease_rate': 0.067,
+    'increase_amount': 10
+}
 
-# Sons des boutons (doivent être traités par audio_importer)
-SOUND_CLICK_FILE = 'yes_clicked'  # Nom du fichier sans extension
-SOUND_HOVER_FILE = 'hover_click' # Nom du fichier sans extension
+# Raycasting settings
+RES = WIDTH, HEIGHT
+HALF_WIDTH = WIDTH // 2
+HALF_HEIGHT = HEIGHT // 2
+TILE_SIZE = 60
+
+FOV = math.pi / 2
+HALF_FOV = FOV / 2
+
+NUM_RAYS = WIDTH // 2
+HALF_NUM_RAYS = NUM_RAYS // 2
+DELTA_ANGLE = FOV / NUM_RAYS
+MAX_DEPTH = 20
+
+SCREEN_DIST = HALF_WIDTH / math.tan(HALF_FOV)
+SCALE = WIDTH // NUM_RAYS
+DELTA_ANGLE = FOV / NUM_RAYS
+MAX_DEPTH = 20
+
+SCREEN_DIST = HALF_WIDTH / math.tan(HALF_FOV)
+SCALE = WIDTH // NUM_RAYS

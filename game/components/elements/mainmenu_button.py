@@ -11,8 +11,8 @@ class Bouton:
     # SOUND_HOVER = audio_importer(SOUND_DIR)[SOUND_HOVER_FILE]
     
     # Si je ne veux voir aucun problème avec PyInstaller...
-    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', SOUND_CLICK_FILE +'.wav')))
-    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', SOUND_HOVER_FILE +'.wav')))
+    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'yes_clicked.wav')))
+    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'hover_click.wav')))
 
     # Police doit être chargée ici ou passée en paramètre. 
     # Le mieux est de la charger ici avec get_font().

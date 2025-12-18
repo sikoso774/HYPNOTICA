@@ -45,7 +45,7 @@ def display_text_center(surface, text, color, y, font_path=None, font_size=None)
     police_font = get_font(font_path, font_size)
 
     text_surf = police_font.render(text, True, color)
-    texte_rect = text_surf.get_rect(center=(WINDOW_WIDTH // 2, y)) 
+    texte_rect = text_surf.get_rect(center=(WIDTH // 2, y)) 
     surface.blit(text_surf, texte_rect)
 
 def get_resource_path(relative_path):

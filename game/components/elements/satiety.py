@@ -5,9 +5,9 @@ class Satiety:
     def __init__(self):
         if not pg.font.get_init():
             pg.font.init()
-        self.value = SATIETY_START
-        self.decrease_rate = SATIETY_DECREASE_RATE
-        self.increase_amount = SATIETY_INCREASE_AMOUNT
+        self.value = SATIETY_DATA['start']
+        self.decrease_rate = SATIETY_DATA['decrease_rate']
+        self.increase_amount = SATIETY_DATA['increase_amount']
         self.font = pg.font.Font(DEFAULT_FONT_NAME, 20) # Police pour afficher la valeur de satiété
 
     def decrease(self):
@@ -26,8 +26,6 @@ class Satiety:
         """Vérifie si la satiété est tombée à zéro."""
         return self.value <= 0
     
-        
-
     def draw(self, surface):
         """
         Dessine la barre de satiété et sa valeur.

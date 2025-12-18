@@ -14,7 +14,7 @@ from .core.level import Level # Nouvelle classe (ex-GamePlay)
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption("Deep Hypnotica")
         self.clock = pg.time.Clock()
         

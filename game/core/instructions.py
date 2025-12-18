@@ -24,7 +24,7 @@ class Instructions(BaseScreen):
 
     def _prepare_content(self):
         # (Même logique que votre code original, adaptée légèrement)
-        current_y = WINDOW_HEIGHT // 6 
+        current_y = HEIGHT // 6 
         self.total_chars = 0
         font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
         
@@ -87,7 +87,7 @@ class Instructions(BaseScreen):
                     text_to_render = item['full_text'][:char_limit]
                     
                     surf = item['font'].render(text_to_render, True, item['color'])
-                    rect = surf.get_rect(center=(WINDOW_WIDTH // 2, item['y']))
+                    rect = surf.get_rect(center=(WIDTH // 2, item['y']))
                     self.screen.blit(surf, rect)
     
     

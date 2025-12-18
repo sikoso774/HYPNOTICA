@@ -4,8 +4,8 @@ from ...config.settings import *
 from ...config.utils import get_resource_path # On garde get_resource_path
 
 # --- Dimensions de l'écran (maintenant importées de settings.py) ---
-LARGEUR_ECRAN_JEU = WINDOW_WIDTH
-HAUTEUR_ECRAN_JEU = WINDOW_HEIGHT
+LARGEUR_ECRAN_JEU = WIDTH
+HAUTEUR_ECRAN_JEU = HEIGHT
 TITRE_FENETRE_JEU = "HYPNOTICA"
 
 # --- Couleurs (utilisez directement COLORS['NOM'] de settings.py) ---

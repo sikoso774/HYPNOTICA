@@ -1,6 +1,6 @@
 import pygame
 import sys
-from game.config.settings import WINDOW_WIDTH, WINDOW_HEIGHT
+from game.config.settings import WIDTH, HEIGHT
 
 # Main Class
 from game.game import Game
@@ -12,6 +12,7 @@ from game.core.mainmenu import MainMenu
 from game.core.instructions import Instructions
 from game.core.intro import Intro
 from game.core.level import Level
+from game.core.map import Map
 
 class Debugger:
     def __init__(self):
@@ -21,7 +22,8 @@ class Debugger:
             "3": ("Instructions", Instructions),
             "4": ("Jeu (Level)", Level),
             "5": ("Game Over", GameOver),
-            "6": ("Crédits", Credits)
+            "6": ("Crédits", Credits),
+            "7": ("Map", Map)
         }
     
     def run_debug(self):
@@ -51,7 +53,7 @@ class Debugger:
                         if not pygame.get_init():
                             pygame.init()
                             # On recrée la fenêtre si elle a été fermée
-                            game_instance.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+                            game_instance.screen = pygame.display.set_mode((WIDTH, HEIGHT))
                         
                         # 2. On lance l'écran
                         current_screen = screen_class(game_instance)
@@ -77,7 +79,7 @@ class Debugger:
                     if not pygame.get_init() or not pygame.display.get_surface():
                         print(">>> Réinitialisation du moteur graphique...")
                         pygame.init()
-                        game_instance.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+                        game_instance.screen = pygame.display.set_mode((WIDTH, HEIGHT))
                         # On s'assure que le son est aussi relancé si besoin
                         try:
                             pygame.mixer.init()

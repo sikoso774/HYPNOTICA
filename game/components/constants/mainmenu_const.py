@@ -9,7 +9,7 @@ BUTTON_ACTIVE_COLOR  = COLORS['orange']
 BUTTON_INACTIVE_COLOR  = COLORS['gray']
 
 # Calcul dynamique du point de départ vertical (centré ou décalé)
-START_Y = WINDOW_HEIGHT // 2 - 50
+START_Y = HEIGHT // 2 - 50
 
 # Configuration des boutons (Texte, Action, Position Y)
 BUTTONS_MENU = [

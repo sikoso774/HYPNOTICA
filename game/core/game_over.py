@@ -18,9 +18,9 @@ class GameOver(BaseScreen):
         bg_path = get_resource_path(join("assets", "images", "Game-Over-Wallpaper-48909.jpg"))
         try:
             self.background = pg.image.load(bg_path).convert()
-            self.background = pg.transform.scale(self.background, (WINDOW_WIDTH, WINDOW_HEIGHT))
+            self.background = pg.transform.scale(self.background, (WIDTH, HEIGHT))
         except pg.error:
-            self.background = pg.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            self.background = pg.Surface((WIDTH, HEIGHT))
             self.background.fill(COLORS['black'])
 
     def on_event(self, event):

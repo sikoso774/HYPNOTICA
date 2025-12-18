@@ -40,8 +40,8 @@ class Credits(BaseScreen):
             if item['type'] == 'image' and 'image_path' in item:
                 try:
                     img = pg.image.load(item['image_path']).convert_alpha()
-                    scaled_width = int(WINDOW_WIDTH * item.get('image_scale_factor', 1))
-                    scaled_height = int(WINDOW_HEIGHT * item.get('image_scale_factor', 1))
+                    scaled_width = int(WIDTH * item.get('image_scale_factor', 1))
+                    scaled_height = int(HEIGHT * item.get('image_scale_factor', 1))
                     img = pg.transform.scale(img, (scaled_width, scaled_height))
                     loaded_images[item['value']] = img
                 except pg.error:
