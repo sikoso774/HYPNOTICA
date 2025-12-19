@@ -2,14 +2,13 @@ import pygame as pg
 import math
 from game.config.settings import *
 
-class RayCaster:
+class RayCasting:
     def __init__(self, game):
         self.game = game
-        self.map_obj = game.map  # On récupérera l'objet Map du jeu
         
     def ray_cast(self):
-        ox, oy = self.game.player.pos # Position du joueur
-        x_map, y_map = int(ox), int(oy)
+        ox, oy = self.game.player.pos
+        x_map, y_map = self.game.player.map_pos
         
         ray_angle = self.game.player.angle - HALF_FOV + 0.0001
         
@@ -25,12 +24,12 @@ class RayCaster:
             delta_depth = dy / sin_a
             dx = delta_depth * cos_a
 
+            depth_hor_final = MAX_DEPTH # Valeur par défaut
+
             for i in range(MAX_DEPTH):
                 tile_hor = int(x_hor), int(y_hor)
-                if tile_hor[0] < 0 or tile_hor[0] >= self.map_obj.cols or tile_hor[1] < 0 or tile_hor[1] >= self.map_obj.rows:
-                    depth_hor = MAX_DEPTH # Hors map
-                    break
-                if self.map_obj.grid[tile_hor[1]][tile_hor[0]] == 1: # Mur trouvé
+                if tile_hor in self.game.map.world_map:
+                    depth_hor_final = depth_hor
                     break
                 x_hor += dx
                 y_hor += dy
@@ -44,34 +43,36 @@ class RayCaster:
             delta_depth = dx / cos_a
             dy = delta_depth * sin_a
 
+            depth_vert_final = MAX_DEPTH # Valeur par défaut
+
             for i in range(MAX_DEPTH):
                 tile_vert = int(x_vert), int(y_vert)
-                if tile_vert[0] < 0 or tile_vert[0] >= self.map_obj.cols or tile_vert[1] < 0 or tile_vert[1] >= self.map_obj.rows:
-                    depth_vert = MAX_DEPTH
-                    break
-                if self.map_obj.grid[tile_vert[1]][tile_vert[0]] == 1: # Mur trouvé
+                if tile_vert in self.game.map.world_map:
+                    depth_vert_final = depth_vert
                     break
                 x_vert += dx
                 y_vert += dy
                 depth_vert += delta_depth
 
-            # Comparaison et Correction Fisheye
-            if depth_vert < depth_hor:
-                depth = depth_vert
+            # Comparaison
+            if depth_vert_final < depth_hor_final:
+                depth = depth_vert_final
             else:
-                depth = depth_hor
+                depth = depth_hor_final
                 
-            # Correction de l'effet "Fisheye" (distorsion sur les bords)
+            # Correction Fisheye
             depth *= math.cos(self.game.player.angle - ray_angle)
 
-            # Dessin du mur
-            # Hauteur perçue = distance_plan / distance_réelle
+            # Dessin du mur (Projection 3D)
             proj_height = SCREEN_DIST / (depth + 0.0001) 
             
-            # On définit une couleur basée sur la distance (brouillard simple)
-            color = [255 / (1 + depth ** 5 * 0.00002)] * 3
+            # Couleur simple (brouillard) pour tester sans textures
+            color_intensity = 255 / (1 + depth ** 5 * 0.00002)
+            color = (color_intensity, color_intensity, color_intensity)
+            
+            # On dessine un rectangle centré verticalement
             pg.draw.rect(self.game.screen, color, 
-                         (ray * SCALE, HEIGHT // 2 - proj_height // 2, SCALE, proj_height))
+                         (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height))
 
             ray_angle += DELTA_ANGLE
 

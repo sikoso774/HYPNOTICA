@@ -1,6 +1,6 @@
 import pygame as pg
 from os.path import join
-from ..config.utils import get_resource_path
+from game.config import get_resource_path
 
 class Sound:
     def __init__(self, game):

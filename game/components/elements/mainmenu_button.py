@@ -1,10 +1,9 @@
-from ...config.settings import *
-from ...config.utils import get_font, get_resource_path # Pour obtenir l'objet police
-from ..constants.mainmenu_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
+from game.config import *
+from game.components import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
 
 import pygame
 
-class Bouton:
+class Button:
     # Chemin des sons, à importer si tu as un sfx_manager.py
     pygame.mixer.init()
     # SOUND_CLICK = audio_importer(SOUND_DIR)[SOUND_CLICK_FILE]

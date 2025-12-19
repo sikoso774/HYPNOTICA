@@ -1,9 +1,8 @@
 # Fichier: game/core/game_over.py
 import pygame as pg
-from ..config.settings import *
-from ..config.utils import get_resource_path
-from ..components.elements.textscroller import TextScroller
-from .base_screen import BaseScreen # Import de la nouvelle classe mère
+from game.config import *
+from game.components import TextScroller
+from game.core.screens import BaseScreen # Import de la nouvelle classe mère
 
 class GameOver(BaseScreen):
     def __init__(self, game):
@@ -28,7 +27,7 @@ class GameOver(BaseScreen):
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_r:
                 self.sound.stop_music()
-                return "restart"
+                return "menu"
             elif event.key == pg.K_q:
                 self.quit_game()
             elif event.key == pg.K_a:

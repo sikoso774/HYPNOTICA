@@ -1,9 +1,7 @@
 import pygame as pg
-from ..config.settings import *
-from ..config.utils import display_text_center as center_text, get_resource_path
-from ..components.constants.mainmenu_const import *
-from ..components.elements.mainmenu_button import Bouton
-from ..components.sprites.animation_gif import Animation_GIF
+from game.config.utils import display_text_center as center_text
+from game.config.settings import *
+from game.components import *
 from .base_screen import BaseScreen  # Import de la classe mère
 
 class MainMenu(BaseScreen):
@@ -22,7 +20,7 @@ class MainMenu(BaseScreen):
         
         for bouton_data in BUTTONS_MENU:
             self.buttons.append(
-                Bouton(center_x, bouton_data['y_offset'], BUTTON_WITDH, BUTTON_HEIGHT, 
+                Button(center_x, bouton_data['y_offset'], BUTTON_WITDH, BUTTON_HEIGHT, 
                        bouton_data['text'], bouton_data['action'])
             )
 

@@ -6,13 +6,8 @@ from game.config.settings import WIDTH, HEIGHT
 from game.game import Game
 
 # Screens imports
-from game.core.game_over import GameOver
-from game.core.credits import Credits
-from game.core.mainmenu import MainMenu
-from game.core.instructions import Instructions
-from game.core.intro import Intro
-from game.core.level import Level
-from game.core.map import Map
+from game.core.screens import *
+from game.core import Level_3D
 
 class Debugger:
     def __init__(self):
@@ -20,10 +15,9 @@ class Debugger:
             "1": ("Intro (Splash)", Intro),
             "2": ("Menu Principal", MainMenu),
             "3": ("Instructions", Instructions),
-            "4": ("Jeu (Level)", Level),
+            "4": ("Jeu (Level)", Level_3D),
             "5": ("Game Over", GameOver),
             "6": ("Crédits", Credits),
-            "7": ("Map", Map)
         }
     
     def run_debug(self):

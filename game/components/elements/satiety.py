@@ -1,5 +1,5 @@
 import pygame as pg
-from ...config.settings import *
+from game.config import *
 
 class Satiety:
     def __init__(self):

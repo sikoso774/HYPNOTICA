@@ -1,6 +1,5 @@
 import pygame as pg
-from ...config.settings import *
-from ...config.utils import get_resource_path
+from game.config import *
 
 class TextScroller:
     def __init__(self):

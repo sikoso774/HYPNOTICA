@@ -1,4 +1,4 @@
-from ...config.settings import COLORS
+from game.config import COLORS
 
 # Contenu des instructions
 

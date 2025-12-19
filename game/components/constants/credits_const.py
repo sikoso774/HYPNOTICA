@@ -1,5 +1,4 @@
-from ...config.settings import *
-from ...config.utils import *
+from game.config import *
 
 # Répertoires et chemins des ressources pour les crédits
 TITLE_COLOR = COLORS['green']

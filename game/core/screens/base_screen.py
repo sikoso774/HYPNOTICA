@@ -1,7 +1,7 @@
 # Fichier: game/core/base_screen.py
 import pygame as pg
 import sys
-from ..config.settings import *
+from game.config import FPS
 
 class BaseScreen:
     def __init__(self, game):
@@ -11,7 +11,7 @@ class BaseScreen:
         self.clock = pg.time.Clock()
         self.running = True
 
-    def handle_events(self):
+    def check_events(self):
         """Gestionnaire d'événements de base."""
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -46,7 +46,7 @@ class BaseScreen:
         self.running = True
         while self.running:
             # 1. Events
-            action = self.handle_events()
+            action = self.check_events()
             if action: return action
 
             # 2. Update : Modifié pour capturer un retour (ex: fin d'intro)

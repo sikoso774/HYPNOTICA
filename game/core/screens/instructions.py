@@ -1,8 +1,7 @@
 import pygame as pg
 from os.path import join
-from ..config.settings import *
-from ..config.utils import get_resource_path
-from ..components.constants.instruction_const import INSTRUCTIONS_CONTENT
+from game.config import *
+from game.components import INSTRUCTIONS_CONTENT
 from .base_screen import BaseScreen
 
 class Instructions(BaseScreen):

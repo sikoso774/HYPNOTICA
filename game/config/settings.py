@@ -4,7 +4,7 @@ import math
 from os.path import join
 
 # --- Configuration Fenêtre ---
-WIDTH = 800
+WIDTH = 800# (800 + 220)
 HEIGHT = 600
 FPS = 60
 GAME_TITLE = "Deep Hypnotica"
@@ -56,6 +56,10 @@ PLAYER_DATA = {
     'speed': 300,
     'sprite_path': None
 }
+
+PLAYER_POS = 1.5, 5
+PLAYER_ANGLE = 0
+PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
 
 # Phone settings 

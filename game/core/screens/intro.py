@@ -1,7 +1,6 @@
 import pygame as pg
 from os.path import join
-from ..config.settings import *
-from ..config.utils import get_resource_path
+from game.config import *
 from .base_screen import BaseScreen
 
 class Intro(BaseScreen):

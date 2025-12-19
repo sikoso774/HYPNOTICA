@@ -1,9 +1,7 @@
 import pygame as pg
-from .base_screen import BaseScreen
-from ..components.sprites.sprites import Player, Phone, Background
-from ..components.elements.satiety import Satiety
-from ..components.sprites.groups import AllSprites
-from ..config.settings import FPS
+from game.core.screens import BaseScreen
+from game.components import *
+# from ..config.settings import FPS
 
 class Level(BaseScreen):
     def __init__(self, game):

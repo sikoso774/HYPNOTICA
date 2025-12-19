@@ -1,7 +1,6 @@
 import pygame as pg
-from ..components.constants.credits_const import *
-from ..config.utils import *
-from ..config.settings import *
+from game.components import CREDITS_CONTENT
+from game.config import *
 from .base_screen import BaseScreen
 
 class Credits(BaseScreen):

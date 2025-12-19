@@ -1,5 +1,4 @@
-# Fichier: game/constants/mainmenu_const.py
-from ...config.settings import *
+from game.config import *
 
 # Dimensions des boutons (peuvent rester ici car spécifiques au menu)
 BUTTON_WITDH = 250
