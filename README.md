@@ -1,4 +1,4 @@
-# DEEP HYPNOTICA PROJECT
+# HYPNOTICA PROJECT
 
  Project by Zoléni Kokolo Zassi
 
