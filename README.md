@@ -40,29 +40,18 @@ HYPNOTICA/
 └── README.md
 ```
 
-## 🔄 Game State Machine
+## 🔄 Screens & Flow
 
-```mermaid
-graph TD
-    Start(("Launch")) --> Menu["Main Menu"]
+Each screen is a state handled by `main.py`'s state machine (`game/core/screens/`, `Level_3D`). Here's what each one does and how you move between them:
 
-    Menu -->|Play| Game["3D Gameplay"]
-    Menu -->|Read| Inst["Instructions"]
-    Menu -->|View| Cred["Credits"]
-
-    Inst -->|Back| Menu
-    Cred -->|Back| Menu
-
-    Game -->|Time elapsed| Over["Game Over"]
-
-    Over -->|Replay| Game
-    Over -->|Main Menu| Menu
-
-    style Start fill:#f9f,stroke:#333,stroke-width:2px
-    style Menu fill:#bbf,stroke:#333,stroke-width:2px
-    style Game fill:#bfb,stroke:#333,stroke-width:2px
-    style Over fill:#fbb,stroke:#333,stroke-width:2px
-```
+| Screen | State key | Description | Goes to |
+|---|---|---|---|
+| **Intro** | `start` | Fading splash sequence (dev logo, credits image, pygame logo). Auto-advances, or skip with `Space`/`Esc`. | → `menu` |
+| **Main Menu** | `menu` | Animated GIF background with 4 buttons: JOUER, INSTRUCTIONS, CREDITS, QUITTER. | → `game` / `instructions` / `credits` / quit |
+| **Instructions** | `instructions` | Typewriter-animated rules text. `Space` skips the animation, then returns; `Esc` returns immediately. | → `menu` |
+| **Gameplay (3D)** | `game` | The raycasting level (`Level_3D`). 60-second timer; reaching zero ends the run. | → `game_over` |
+| **Game Over** | `game_over` | Scrolling text over a game-over background. `R` restarts, `A` jumps to credits, `Q` quits. | → `menu` / `credits` / quit |
+| **Credits** | `credits` | Auto-scrolling credits list. `M`/`Esc` returns to the menu, `Q` quits. | → `menu` / quit |
 
 ## 📜 License
 
