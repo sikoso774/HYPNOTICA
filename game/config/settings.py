@@ -7,7 +7,7 @@ from os.path import join
 WIDTH = 800# (800 + 220)
 HEIGHT = 600
 FPS = 60
-GAME_TITLE = "Deep Hypnotica"
+GAME_TITLE = "Hypnotica"
 
 # --- Chemins et Ressources ---
 # Base directory
@@ -98,3 +98,6 @@ MAX_DEPTH = 20
 
 SCREEN_DIST = HALF_WIDTH / math.tan(HALF_FOV)
 SCALE = WIDTH // NUM_RAYS
+
+TEXTURE_SIZE = 256
+HALF_TEXTURE_SIZE = TEXTURE_SIZE // 2

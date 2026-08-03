@@ -29,6 +29,8 @@ class Level_3D(BaseScreen):
         self.raycaster = RayCasting(self.game)
 
     def update(self):
+        fps = self.clock.get_fps()
+        pg.display.set_caption(f'{GAME_TITLE} | FPS : {fps}')
         # Récupère le temps écoulé depuis la dernière frame (en millisecondes)
         dt_ms = self.clock.get_time()
         # On stocke dt en secondes pour les calculs de vitesse du joueur
