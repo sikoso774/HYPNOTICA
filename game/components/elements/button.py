@@ -1,5 +1,5 @@
 from game.config import *
-from game.components import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
+from game.components.constants.button_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
 
 import pygame
 

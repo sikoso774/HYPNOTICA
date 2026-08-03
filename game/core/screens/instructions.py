@@ -23,25 +23,14 @@ class Instructions(BaseScreen):
 
     def _prepare_content(self):
         # (Même logique que votre code original, adaptée légèrement)
-        current_y = HEIGHT // 6 
+        current_y = HEIGHT // 6
         self.total_chars = 0
-        font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
-        
-        # Création d'une police par défaut si besoin
-        try:
-            default_font = pg.font.Font(font_path, 30)
-        except Exception:
-            default_font = pg.font.Font(None, 30)
 
         for item in self.instruction_data:
             if item['type'] == 'text':
                 size = item.get('font-size', 30)
-                # On tente de charger la font à la bonne taille, sinon fallback
-                try:
-                    font = pg.font.Font(font_path, size)
-                except:
-                    font = pg.font.Font(None, size)
-                
+                font = get_font(DEFAULT_FONT_NAME, size)
+
                 self.prepared_items.append({
                     'type': 'text',
                     'full_text': item['value'],

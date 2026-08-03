@@ -33,13 +33,8 @@ class Intro(BaseScreen):
         self.sequence_finished = False
 
     def _init_fonts(self):
-        font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
-        try:
-            self.font_logo = pg.font.Font(font_path, 48)
-            self.font_dev = pg.font.Font(font_path, 36)
-        except Exception:
-            self.font_logo = pg.font.Font(None, 48)
-            self.font_dev = pg.font.Font(None, 36)
+        self.font_logo = get_font(DEFAULT_FONT_NAME, 48)
+        self.font_dev = get_font(DEFAULT_FONT_NAME, 36)
 
     def _load_images(self, data):
         for filename, (fx, fy) in data:

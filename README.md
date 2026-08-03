@@ -10,7 +10,6 @@ My first video game, built with [`pygame-ce`](https://pyga.me/). This version (`
 - **Smooth frame-rate independent movement** (WASD/ZQSD + arrows), with wall sliding.
 - **State machine** driving screen transitions (intro, menu, instructions, game, game over, credits).
 - **Centralized audio management** (per-screen music, sound effects) via `Sound`.
-- A legacy top-down 2D level (`Level`) remains in the code but is no longer connected to the game — `Level_3D` (raycasting) is the active gameplay.
 
 ## 🚀 Installation & Launch
 
@@ -27,14 +26,14 @@ uv run main.py
 HYPNOTICA/
 ├── assets/                    # Images, audio, fonts
 ├── game/
-│   ├── components/            # Sprites & UI for the legacy 2D screen + menu
+│   ├── components/            # UI for the menu + game over screens
 │   │   ├── constants/          # Layout constants per screen
-│   │   ├── elements/           # Button, Satiety, TextScroller
-│   │   └── sprites/            # Player/Phone/Background/AllSprites, animated GIF
+│   │   ├── elements/           # Button, TextScroller
+│   │   └── sprites/            # Animated GIF (main-menu background)
 │   ├── config/                 # Global settings, audio manager, utilities
 │   ├── core/
 │   │   ├── screens/             # Intro, MainMenu, Instructions, Credits, GameOver, BaseScreen
-│   │   └── levels/              # Level (legacy 2D) and Level_3D (raycasting, active)
+│   │   └── levels/              # Level_3D (raycasting, active)
 │   └── raycasting_engine/      # Map, Player, RayCasting (DDA engine)
 ├── main.py                     # Entry point: Game class (state machine)
 └── README.md
