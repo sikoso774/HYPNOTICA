@@ -1,16 +1,18 @@
-# Fichier: game/core/game_over.py
+# File: game/core/game_over.py
 import pygame as pg
 from game.config import *
 from game.components import Button, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_SPACING
-from game.core.screens import BaseScreen # Import de la nouvelle classe mère
+from game.core.screens import BaseScreen # Import of the new parent class
 
 
 class GameOver(BaseScreen):
-    def __init__(self, game):
-        super().__init__(game) # Initialisation du parent
-        self.music_name = 'game_over' # Le BaseScreen jouera ça automatiquement
+    """The game-over screen, shown when the level timer runs out."""
 
-        # --- Chargement spécifique ---
+    def __init__(self, game):
+        super().__init__(game) # Parent initialization
+        self.music_name = 'game_over' # BaseScreen will play this automatically
+
+        # --- Screen-specific loading ---
         self._load_background()
         self._load_fonts()
         self._build_buttons()
@@ -24,7 +26,7 @@ class GameOver(BaseScreen):
             self.background = pg.Surface((WIDTH, HEIGHT))
             self.background.fill(COLORS['black'])
 
-        # Voile semi-transparent pour garder le fond lisible sous le texte/boutons
+        # Semi-transparent overlay to keep the background readable under the text/buttons
         self.overlay = pg.Surface((WIDTH, HEIGHT), pg.SRCALPHA)
         self.overlay.fill((0, 0, 0, 225))
 
@@ -45,7 +47,7 @@ class GameOver(BaseScreen):
         ]
 
     def on_event(self, event):
-        # Boutons cliquables (souris)
+        # Clickable buttons (mouse)
         for button in self.buttons:
             action = button.manage_event(event)
             if action:
@@ -55,7 +57,7 @@ class GameOver(BaseScreen):
                 self.sound.stop_music()
                 return action
 
-        # Raccourcis clavier équivalents
+        # Equivalent keyboard shortcuts
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_r:
                 self.sound.stop_music()
@@ -68,16 +70,16 @@ class GameOver(BaseScreen):
         return None
 
     def draw(self):
-        # 1. Fond assombri pour garantir la lisibilité
+        # 1. Darkened background to ensure readability
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.overlay, (0, 0))
 
-        # 2. Titre
+        # 2. Title
         title_surf = self.font_title.render("GAME OVER", True, COLORS['white'])
         title_rect = title_surf.get_rect(center=(WIDTH // 2, HEIGHT // 4))
         self.screen.blit(title_surf, title_rect)
 
-        # 3. Boutons
+        # 3. Buttons
         for button in self.buttons:
             button.draw(self.screen)
 

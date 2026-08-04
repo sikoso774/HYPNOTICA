@@ -3,8 +3,8 @@ import math
 from game.config import *
 from game.core.screens import BaseScreen
 
-# Profondeurs de la carte du monde (un seul niveau existe pour l'instant :
-# les suivantes sont verrouillees, elles montrent la suite prevue).
+# World map depths (only one level exists for now:
+# the following ones are locked, they show what's planned next).
 NODES = [
     {'name': "L'Antichambre", 'depth': 'I', 'locked': False, 'action': 'game',
      'flavor': "Le seuil de ta conscience. La premiere porte."},
@@ -34,6 +34,8 @@ PANEL_BG = (21, 15, 36)
 
 
 class WorldMap(BaseScreen):
+    """Super Mario World-style level-select screen: nodes placed along a spiral path."""
+
     def __init__(self, game):
         super().__init__(game)
         self.font_title = get_font(DEFAULT_FONT_NAME, 34)
@@ -46,16 +48,16 @@ class WorldMap(BaseScreen):
         self.selected = 0
 
     def run(self):
-        """Repart toujours sur la premiere profondeur en entrant sur la carte."""
+        """Always restarts on the first depth when entering the map."""
         self.selected = 0
         return super().run()
 
-    # --- Geometrie de la spirale ---
+    # --- Spiral geometry ---
 
     def _build_path(self):
-        """Echantillonne la spirale et calcule sa longueur cumulee, pour pouvoir
-        ensuite placer les noeuds a intervalles reguliers le long de la courbe
-        (et non a intervalles reguliers en angle, ce qui les tasserait au centre)."""
+        """Samples the spiral and computes its cumulative length, so nodes can then
+        be placed at regular intervals along the curve (rather than at regular
+        angle intervals, which would bunch them up near the center)."""
         steps = 300
         samples = []
         cumulative_len = 0.0
@@ -98,7 +100,7 @@ class WorldMap(BaseScreen):
             cos_t = math.cos(theta)
             node['label_align'] = 'left' if cos_t > 0.15 else ('right' if cos_t < -0.15 else 'center')
 
-    # --- Entrees ---
+    # --- Inputs ---
 
     def on_event(self, event):
         if event.type == pg.KEYDOWN:
@@ -144,7 +146,7 @@ class WorldMap(BaseScreen):
         self.sound.play_sfx('confirm')
         return node['action']
 
-    # --- Rendu ---
+    # --- Rendering ---
 
     def draw(self):
         self.screen.fill(COLORS['black'])
@@ -185,8 +187,8 @@ class WorldMap(BaseScreen):
             depth_surf = self.font_node.render(node['depth'], True, ring_color)
             depth_rect = depth_surf.get_rect(center=pos)
             self.screen.blit(depth_surf, depth_rect)
-            # Marqueur de progression : toujours sur la premiere profondeur,
-            # le seul niveau reellement jouable aujourd'hui.
+            # Progress marker: always on the first depth,
+            # the only level that's actually playable today.
             if index == 0:
                 pg.draw.circle(self.screen, SELECTED_COLOR, pos, 4)
 

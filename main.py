@@ -1,12 +1,14 @@
 import pygame as pg
 import sys
 
-# Config du jeu
+# Game config
 from game.config import *
 from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level3D, WorldMap
 
 
 class Game:
+    """Owns the display surface, sound manager, and the top-level screen state machine."""
+
     def __init__(self):
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -40,23 +42,23 @@ class Game:
             action = self.credits.run()
 
         elif self.current_state == 'game':
-            # On recrée le niveau pour reset la partie (optionnel)
+            # Recreate the level to reset the run (optional)
             self.level = Level3D(self)
             action = self.level.run()
 
         elif self.current_state == 'game_over':
             action = self.game_over.run()
 
-        # --- Gestion des transitions ---
+        # --- Transition handling ---
         if action == 'quit':
             pg.quit()
             sys.exit()
 
         elif action:
-            self.current_state = action # Changement d'état (ex: "menu" -> "game")
+            self.current_state = action # State change (e.g. "menu" -> "game")
 
     def run(self):
-        """Boucle principale qui délègue le contrôle aux écrans"""
+        """Main loop that delegates control to the screens."""
         while True:
             self.update()
 

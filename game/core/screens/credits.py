@@ -2,17 +2,17 @@ import pygame as pg
 from game.config import *
 from .base_screen import BaseScreen
 
-# Contenu des crédits
+# Credits content
 TITLE_COLOR = COLORS['green']
 TEXT_COLOR = COLORS['white']
 IMAGE_PATH = get_resource_path(os.path.join(IMAGES_DIR, "Zoléni_Cyberpunk.jpg"))
 
 CREDITS_CONTENT = [
     {'type': 'text', 'value': "Credits", 'font_size': 60, 'color': TITLE_COLOR},
-    {'type': 'spacer', 'height': 80}, # Espacement
+    {'type': 'spacer', 'height': 80}, # Spacing
     {'type': 'text', 'value': "Developer : Sikoso 774", 'font_size': 32, 'color': TEXT_COLOR},
     {'type': 'spacer', 'height': 150},
-    {'type': 'image', 'value': "developer_image", 'image_path': IMAGE_PATH, 'image_scale_factor': 0.5}, # chemin direct pour l'image
+    {'type': 'image', 'value': "developer_image", 'image_path': IMAGE_PATH, 'image_scale_factor': 0.5}, # direct path for the image
     {'type': 'spacer', 'height': 50},
     {'type': 'text', 'value': "Musics :", 'font_size': 30, 'color': TEXT_COLOR},
     {'type': 'text', 'value': "waera - harinezumi [NCS Release]", 'font_size': 24, 'color': COLORS['gray']},
@@ -32,13 +32,15 @@ CREDITS_CONTENT = [
     {'type': 'text', 'value': "- Pygame Community", 'font_size': 24, 'color': TEXT_COLOR},
     {'type': 'spacer', 'height': 80},
     {'type': 'text', 'value': "Thank You For Playing!", 'font_size': 40, 'color': COLORS['green']},
-    {'type': 'spacer', 'height': 150}, # Grand espacement pour la fin
+    {'type': 'spacer', 'height': 150}, # Large spacing before the end
     {'type': 'text', 'value': "Press Q to Quit", 'font_size': 24, 'color': COLORS['red']},
     {'type': 'text', 'value': "Press M to Main Menu", 'font_size': 24, 'color': COLORS['blue']},
 ]
 
 
 class Credits(BaseScreen):
+    """The scrolling end-credits screen."""
+
     def __init__(self, game):
         super().__init__(game)
         self.music_name = 'credits'
@@ -46,29 +48,29 @@ class Credits(BaseScreen):
         self.credit_data = CREDITS_CONTENT
         self.scrolling_speed = 1.5
 
-        # Préparation du contenu
+        # Content preparation
         self.prepare_credits = self._prepare_credits()
 
-        # Calcul de la hauteur
+        # Height calculation
         _, self.screen_h = self.screen.get_size()
         self.total_height = sum(item['height'] for item in self.prepare_credits) + self.screen_h * 0.1
 
-        # Initialisation de la variable (sera reset dans run)
+        # Variable initialization (will be reset in run)
         self.credits_y = self.screen_h
 
-    # --- AJOUTEZ CETTE MÉTHODE ICI ---
+    # --- ADD THIS METHOD HERE ---
     def run(self):
         """
-        Surcharge de run() :
-        On remet le texte en bas de l'écran avant de lancer la boucle.
+        Overrides run():
+        Puts the text back at the bottom of the screen before starting the loop.
         """
-        self.credits_y = self.screen_h  # RESET : Retour au départ
-        return super().run()            # Lancement standard (boucle + musique)
+        self.credits_y = self.screen_h  # RESET: back to the start
+        return super().run()            # Standard launch (loop + music)
     # ---------------------------------
 
-    # ... Le reste des méthodes (_load_images, _prepare_credits, on_event, update, draw) reste identique ...
+    # ... The rest of the methods (_load_images, _prepare_credits, on_event, update, draw) stay the same ...
     def _load_images(self) -> dict:
-        # [Votre code existant...]
+        # [Your existing code...]
         loaded_images = {}
         for item in CREDITS_CONTENT:
             if item['type'] == 'image' and 'image_path' in item:
@@ -83,12 +85,12 @@ class Credits(BaseScreen):
         return loaded_images
 
     def _prepare_credits(self):
-        # [Votre code existant...]
+        # [Your existing code...]
         prepared_list = []
         loaded_images = self._load_images()
 
         for item in self.credit_data:
-            # ... (Copiez le contenu de votre fonction existante) ...
+            # ... (copy the content of your existing function) ...
             prepared_item = {'type': item['type']}
             if item['type'] == 'text':
                 font_size = item.get('font_size', 36)
@@ -113,7 +115,7 @@ class Credits(BaseScreen):
 
     def on_event(self, event):
         if event.type == pg.KEYDOWN:
-            # Touche M ou ESC pour revenir au menu
+            # M or ESC key to return to the menu
             if event.key == pg.K_m or event.key == pg.K_ESCAPE:
                 self.sound.play_sfx('click')
                 return "menu"
@@ -123,12 +125,12 @@ class Credits(BaseScreen):
 
     def update(self):
         self.credits_y -= self.scrolling_speed
-        # Si tout est passé, on peut soit boucler, soit revenir au menu automatiquement
+        # Once everything has scrolled past, we can either loop or return to the menu automatically
         if self.credits_y < -self.total_height:
-             # Option A : Boucle infinie
+             # Option A: infinite loop
              self.credits_y = self.screen_h
 
-             # Option B : Retour automatique au menu (décommentez ci-dessous)
+             # Option B: automatic return to the menu (uncomment below)
              # return "menu"
 
     def draw(self):

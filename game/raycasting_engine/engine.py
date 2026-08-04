@@ -4,19 +4,21 @@ from game.config.settings import *
 
 
 class RayCasting:
+    """DDA-style raycaster: casts a ray per screen column and draws textured wall slices."""
+
     def __init__(self, game):
         self.game = game
         self.wall_textures = self._load_wall_textures()
 
     def _load_wall_textures(self):
         """
-        Textures de mur par wall_id, à bandes verticales. Procédurales en
-        attendant de vraies textures d'assets — le motif à bandes permet de
-        vérifier visuellement que le mapping offset -> colonne fonctionne.
+        Wall textures per wall_id, with vertical stripes. Procedural while
+        waiting for real asset textures — the striped pattern lets us
+        visually verify that the offset -> column mapping works correctly.
         """
         palette = {
             1: ((140, 90, 60), (110, 70, 45)),   # terracotta
-            2: ((90, 100, 110), (70, 80, 90)),   # pierre grise
+            2: ((90, 100, 110), (70, 80, 90)),   # gray stone
         }
         return {wall_id: self._make_striped_texture(*colors) for wall_id, colors in palette.items()}
 
@@ -39,7 +41,7 @@ class RayCasting:
             sin_a = math.sin(ray_angle)
             cos_a = math.cos(ray_angle)
 
-            # --- Horizontales ---
+            # --- Horizontal ---
             y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
             depth_hor = (y_hor - oy) / sin_a
             x_hor = ox + depth_hor * cos_a
@@ -47,7 +49,7 @@ class RayCasting:
             delta_depth = dy / sin_a
             dx = delta_depth * cos_a
 
-            depth_hor_final = MAX_DEPTH # Valeur par défaut
+            depth_hor_final = MAX_DEPTH # Default value
             wall_id_hor = None
 
             for i in range(MAX_DEPTH):
@@ -60,7 +62,7 @@ class RayCasting:
                 y_hor += dy
                 depth_hor += delta_depth
 
-            # --- Verticales ---
+            # --- Vertical ---
             x_vert, dx = (x_map + 1, 1) if cos_a > 0 else (x_map - 1e-6, -1)
             depth_vert = (x_vert - ox) / cos_a
             y_vert = oy + depth_vert * sin_a
@@ -68,7 +70,7 @@ class RayCasting:
             delta_depth = dx / cos_a
             dy = delta_depth * sin_a
 
-            depth_vert_final = MAX_DEPTH # Valeur par défaut
+            depth_vert_final = MAX_DEPTH # Default value
             wall_id_vert = None
 
             for i in range(MAX_DEPTH):
@@ -81,9 +83,9 @@ class RayCasting:
                 y_vert += dy
                 depth_vert += delta_depth
 
-            # Comparaison : on garde le mur le plus proche, son ID, l'orientation de la face touchée
-            # et l'offset (position fractionnaire 0-1 du point d'impact sur la face), qui donne la
-            # colonne de texture à afficher.
+            # Comparison: keep the nearest wall, its ID, the orientation of the hit face,
+            # and the offset (fractional 0-1 position of the hit point on the face), which
+            # gives the texture column to display.
             if depth_vert_final < depth_hor_final:
                 depth = depth_vert_final
                 wall_id = wall_id_vert
@@ -99,16 +101,16 @@ class RayCasting:
                 if sin_a < 0:
                     offset = 1 - offset
 
-            # Correction Fisheye
+            # Fisheye correction
             depth *= math.cos(self.game.player.angle - ray_angle)
 
-            # Dessin du mur (Projection 3D)
+            # Wall drawing (3D projection)
             proj_height = SCREEN_DIST / (depth + 0.0001)
-            # Bornée : très près d'un mur, proj_height peut exploser bien au-delà de l'écran,
-            # ce que pg.transform.scale refuse (au-delà de l'écran, le rendu est identique de toute façon)
+            # Clamped: very close to a wall, proj_height can explode well beyond the screen,
+            # which pg.transform.scale rejects (beyond the screen, the render looks the same anyway)
             proj_height_int = min(int(proj_height), HEIGHT * 4)
 
-            # Ombrage par distance (+ faces verticales légèrement assombries pour les distinguer)
+            # Distance shading (+ vertical faces slightly darkened to tell them apart)
             brightness = 255 / (1 + depth ** 5 * 0.00002)
             if is_vertical_hit:
                 brightness *= 0.85
@@ -122,7 +124,7 @@ class RayCasting:
                 wall_column.fill((brightness, brightness, brightness), special_flags=pg.BLEND_RGB_MULT)
                 self.game.screen.blit(wall_column, (ray * SCALE, HALF_HEIGHT - proj_height_int // 2))
             else:
-                # Filet de sécurité si un wall_id n'a pas de texture associée
+                # Safety net in case a wall_id has no associated texture
                 color = (brightness, brightness, brightness)
                 pg.draw.rect(self.game.screen, color,
                              (ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height))

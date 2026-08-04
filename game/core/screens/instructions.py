@@ -2,7 +2,7 @@ import pygame as pg
 from game.config import *
 from .base_screen import BaseScreen
 
-# Contenu des instructions
+# Instructions content
 INSTRUCTIONS_CONTENT = [
     {'type': 'text', 'value': "Welcome to HYPNOTICA", 'font-size': 50, 'color': COLORS['white']},
     {'type': 'spacer', 'height': 50},
@@ -18,11 +18,13 @@ INSTRUCTIONS_CONTENT = [
 
 
 class Instructions(BaseScreen):
+    """The instructions screen, with a typewriter-style text reveal animation."""
+
     def __init__(self, game):
         super().__init__(game)
         self.instruction_data = INSTRUCTIONS_CONTENT
 
-        # Variables animation
+        # Animation variables
         self.current_char_index = 0
         self.last_char_time = 0
         self.typing_speed = 30
@@ -31,11 +33,11 @@ class Instructions(BaseScreen):
         self.prepared_items = []
         self._prepare_content()
 
-        # Reset pour l'animation au démarrage
+        # Reset for the animation on startup
         self.last_char_time = pg.time.get_ticks()
 
     def _prepare_content(self):
-        # (Même logique que votre code original, adaptée légèrement)
+        # (same logic as the original code, slightly adapted)
         current_y = HEIGHT // 6
         self.total_chars = 0
 
@@ -61,7 +63,7 @@ class Instructions(BaseScreen):
     def on_event(self, event):
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_SPACE:
-                # Si l'animation n'est pas finie, on l'accélère
+                # If the animation isn't finished, speed it up
                 if self.current_char_index < self.total_chars:
                     self.current_char_index = self.total_chars
                 else:
@@ -81,9 +83,9 @@ class Instructions(BaseScreen):
         self.screen.fill(COLORS['black'])
         for item in self.prepared_items:
             if item['type'] == 'text':
-                # On n'affiche que si l'index global a dépassé le start_index de la ligne
+                # Only display once the global index has passed this line's start_index
                 if self.current_char_index > item['start_index']:
-                    # Combien de caractères de cette ligne afficher ?
+                    # How many characters of this line should be displayed?
                     char_limit = min(self.current_char_index - item['start_index'], item['length'])
                     text_to_render = item['full_text'][:char_limit]
 

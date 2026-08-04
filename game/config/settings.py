@@ -1,15 +1,15 @@
-# Fichier: game/config/settings.py
+# File: game/config/settings.py
 import os
 import math
 from os.path import join
 
-# --- Configuration Fenêtre ---
+# --- Window Configuration ---
 WIDTH = 800# (800 + 220)
 HEIGHT = 600
 FPS = 60
 GAME_TITLE = "Hypnotica"
 
-# --- Chemins et Ressources ---
+# --- Paths and Resources ---
 # Base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ASSETS_DIR = os.path.join("assets")
@@ -19,7 +19,7 @@ FONTS_DIR = os.path.join(ASSETS_DIR, "fonts")
 
 DEFAULT_FONT_NAME = os.path.join(FONTS_DIR, "MINDCONTROL.ttf")
 
-# --- Couleurs (Palette Globale) ---
+# --- Colors (Global Palette) ---
 # global colors palette
 COLORS = {
     'white': (255, 255, 255),
@@ -46,7 +46,7 @@ COLORS = {
     'ui_hover': (200, 200, 200),
 }
 
-# --- Gameplay & Physique  ---
+# --- Gameplay & Physics  ---
 GRAVITY = 0.8
 JUMP_STRENGTH = -15
 

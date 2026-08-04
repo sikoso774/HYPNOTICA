@@ -1,39 +1,41 @@
-# Fichier: game/core/base_screen.py
+# File: game/core/base_screen.py
 import pygame as pg
 import sys
 from game.config import FPS
 
 
 class BaseScreen:
+    """Base class for all screens, implementing the shared check/update/draw loop."""
+
     def __init__(self, game):
         self.game = game
-        self.screen = game.screen  # Accès direct à l'écran via l'objet Game
-        self.sound = game.sound    # Accès au gestionnaire de son
+        self.screen = game.screen  # Direct access to the screen via the Game object
+        self.sound = game.sound    # Access to the sound manager
         self.clock = pg.time.Clock()
         self.running = True
 
     def check_events(self):
-        """Gestionnaire d'événements de base."""
+        """Base event handler."""
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 self.quit_game()
 
-            # Hook pour les classes enfants (ex: appuie sur une touche)
+            # Hook for child classes (e.g. key press)
             action = self.on_event(event)
             if action:
                 return action
         return None
 
     def on_event(self, event):
-        """À surcharger par les enfants pour gérer les inputs spécifiques."""
+        """To be overridden by children to handle screen-specific inputs."""
         return None
 
     def update(self):
-        """Logique de mise à jour (animations, scroll, etc)."""
+        """Update logic (animations, scroll, etc)."""
         pass
 
     def draw(self):
-        """Dessin à l'écran."""
+        """Draw to the screen."""
         pass
 
     def quit_game(self):
@@ -51,10 +53,10 @@ class BaseScreen:
             if action:
                 return action
 
-            # 2. Update : Modifié pour capturer un retour (ex: fin d'intro)
+            # 2. Update: modified to capture a return value (e.g. end of intro)
             update_action = self.update()
             if update_action:
-                return update_action  # Si update renvoie "menu", on sort !
+                return update_action  # If update returns "menu", we exit!
 
             # 3. Draw
             self.draw()

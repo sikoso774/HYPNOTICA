@@ -2,9 +2,9 @@ import pygame as pg
 from game.config.utils import display_text_center as center_text
 from game.config.settings import *
 from game.components import *
-from .base_screen import BaseScreen  # Import de la classe mère
+from .base_screen import BaseScreen  # Import of the parent class
 
-# Configuration des boutons du menu (Texte, Action, Position Y)
+# Menu button configuration (Text, Action, Y position)
 START_Y = HEIGHT // 2 - 50
 BUTTONS_MENU = [
     {'text': 'JOUER', 'action': 'world_map', 'y_offset': START_Y},
@@ -15,17 +15,19 @@ BUTTONS_MENU = [
 
 
 class MainMenu(BaseScreen):
+    """The main menu screen, with an animated GIF background and navigation buttons."""
+
     def __init__(self, game):
         super().__init__(game)
-        self.music_name = 'menu'  # Référence à la clé dans SoundHandler
+        self.music_name = 'menu'  # Reference to the key in SoundHandler
 
         # 1. Assets (GIF)
         gif_path = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
         self.gif_animator = AnimationGif(gif_path, self.screen)
 
-        # 2. Boutons
+        # 2. Buttons
         self.buttons = []
-        # On centre les boutons par rapport à la largeur de l'écran
+        # Center the buttons relative to the screen width
         center_x = self.screen.get_width() // 2 - BUTTON_WIDTH // 2
 
         for button_data in BUTTONS_MENU:
@@ -35,34 +37,34 @@ class MainMenu(BaseScreen):
             )
 
     def on_event(self, event):
-        # Gestion des clics sur les boutons
+        # Handle button clicks
         for button in self.buttons:
             action = button.manage_event(event)
             if action:
-                self.sound.play_sfx('click') # Petit bonus : son de clic !
+                self.sound.play_sfx('click') # Little bonus: click sound!
                 return action
 
-        # Raccourci clavier (Q pour quitter)
+        # Keyboard shortcut (Q to quit)
         if event.type == pg.KEYDOWN and event.key == pg.K_q:
             self.quit_game()
 
         return None
 
     def update(self):
-        # Mise à jour de l'animation GIF à chaque frame
+        # Update the GIF animation every frame
         self.gif_animator.animate()
 
     def draw(self):
-        # 1. Fond (GIF)
+        # 1. Background (GIF)
         frame_index = self.gif_animator.animation_frame
         self.screen.blit(self.gif_animator.frames[frame_index], (0, 0))
 
-        # 2. Textes
+        # 2. Text
         center_text(self.screen, "HYPNOTICA", COLORS['white'], self.screen.get_height() // 4,
                     font_path=get_resource_path(DEFAULT_FONT_NAME))
         center_text(self.screen, "Zoléni KOKOLO ZASSI - 2025", COLORS['white'],
                     self.screen.get_height() // 4 + 50, font_size=28)
 
-        # 3. Boutons
+        # 3. Buttons
         for button in self.buttons:
             button.draw(self.screen, self.gif_animator.frames[frame_index])

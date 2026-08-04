@@ -1,7 +1,7 @@
-# Style partagé des boutons
+# Shared button style
 from .button_style import *
 
-# Elements du jeu
+# Game elements
 from .elements.button import Button
 from .elements.textscroller import TextScroller
 
