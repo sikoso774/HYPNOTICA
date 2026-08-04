@@ -3,22 +3,25 @@ from os.path import join
 from game.config import *
 from .base_screen import BaseScreen
 
+
 class Intro(BaseScreen):
+    """Splash-screen intro sequence: fades through a set of images before the main menu."""
+
     def __init__(self, game):
         super().__init__(game)
-        self.music_name = 'intro' # Sera lancé automatiquement par BaseScreen.run()
+        self.music_name = 'intro' # Will be started automatically by BaseScreen.run()
 
-        # Configuration des durées
-        self.DURATION = 3000      # Temps par image
-        self.FADE_DURATION = 1000 
+        # Duration configuration
+        self.DURATION = 3000      # Time per image
+        self.FADE_DURATION = 1000
         self.ALPHA_SPEED = 255 / self.FADE_DURATION
-        
-        # Textes
+
+        # Texts
         self.text_logo = "HYPNOTICA"
         self.text_dev = "Sikoso774"
         self._init_fonts()
-        
-        # Chargement des images
+
+        # Loading images
         images_data = [
             ("Zoléni_Cyberpunk.jpg", (0.5, 0.5)),
             ("PP_Sikoso_77.jpg", (0.5, 0.5)),
@@ -27,7 +30,7 @@ class Intro(BaseScreen):
         self.images = []
         self._load_images(images_data)
 
-        # Gestion de l'état de la séquence
+        # Sequence state management
         self.image_index = 0
         self.phase_start_time = 0
         self.sequence_finished = False
@@ -41,28 +44,28 @@ class Intro(BaseScreen):
             try:
                 path = get_resource_path(join("assets", "images", filename))
                 img = pg.image.load(path).convert_alpha()
-                
-                # Redimensionnement proportionnel
+
+                # Proportional resizing
                 target_w = int(WIDTH * fx)
                 target_h = int(HEIGHT * fy)
                 img_w, img_h = img.get_size()
                 ratio = min(target_w / img_w, target_h / img_h)
                 new_size = (int(img_w * ratio), int(img_h * ratio))
-                
+
                 img = pg.transform.scale(img, new_size)
                 self.images.append(img)
             except Exception as e:
-                print(f"Erreur chargement image intro {filename}: {e}")
+                print(f"Error loading intro image {filename}: {e}")
 
     def run(self):
-        """Surcharge de run pour initialiser le timer au démarrage."""
+        """Overrides run to initialize the timer on start."""
         self.phase_start_time = pg.time.get_ticks()
         self.image_index = 0
-        # On appelle le run du parent qui gère la boucle principale
+        # Calls the parent's run, which handles the main loop
         return super().run()
 
     def on_event(self, event):
-        # Permet de passer l'intro avec Espace ou echap
+        # Allows skipping the intro with Space or Escape
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_SPACE or event.key == pg.K_ESCAPE:
                 self.sound.play_sfx('confirm')
@@ -70,36 +73,36 @@ class Intro(BaseScreen):
         return None
 
     def update(self):
-        """Gère la logique temporelle de l'intro."""
+        """Handles the intro's timing logic."""
         current_time = pg.time.get_ticks()
         elapsed = current_time - self.phase_start_time
 
-        # Si le temps de l'image actuelle est écoulé
+        # If the current image's time has elapsed
         if elapsed >= self.DURATION:
             self.image_index += 1
             if self.image_index >= len(self.images):
-                # Fin de la séquence -> on force la fin de la boucle du BaseScreen
-                # Astuce: BaseScreen.run() boucle sur self.running.
-                # Mais BaseScreen n'a pas prévu de retour automatique sans event.
-                # On va modifier légèrement BaseScreen ou utiliser une astuce ici.
-                # Le plus propre : simuler une action de retour.
-                return "menu" 
-            
-            # Reset pour la prochaine image
+                # End of sequence -> force the BaseScreen loop to end
+                # Trick: BaseScreen.run() loops on self.running.
+                # But BaseScreen has no built-in automatic return without an event.
+                # We could tweak BaseScreen slightly or use a trick here.
+                # Cleanest approach: simulate a return action.
+                return "menu"
+
+            # Reset for the next image
             self.phase_start_time = current_time
 
     def draw(self):
-        # Attention : si update() a détecté la fin, image_index peut être hors limite 
-        # le temps d'une frame avant que run() ne retourne. Sécurité :
+        # Careful: if update() detected the end, image_index can be out of bounds
+        # for one frame before run() returns. Safety check:
         if self.image_index >= len(self.images):
             return
 
         self.screen.fill(COLORS['black'])
-        
+
         current_img = self.images[self.image_index]
         elapsed = pg.time.get_ticks() - self.phase_start_time
-        
-        # 1. Calcul Alpha Image (Fade In / Static / Fade Out)
+
+        # 1. Image Alpha Calculation (Fade In / Static / Fade Out)
         alpha_img = 255
         if elapsed < self.DURATION / 3: # Fade In
             alpha_img = int(elapsed * self.ALPHA_SPEED)
@@ -112,23 +115,23 @@ class Intro(BaseScreen):
         rect = temp_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         self.screen.blit(temp_img, rect)
 
-        # 2. Texte Logo (Fade In retardé)
+        # 2. Logo Text (delayed Fade In)
         alpha_txt1 = 0
         if elapsed > self.DURATION / 3:
             alpha_txt1 = int((elapsed - self.DURATION / 3) * self.ALPHA_SPEED)
             alpha_txt1 = max(0, min(255, alpha_txt1))
-        
+
         surf_logo = self.font_logo.render(self.text_logo, True, COLORS['white'])
         surf_logo.set_alpha(alpha_txt1)
         rect_logo = surf_logo.get_rect(center=(WIDTH // 2, HEIGHT // 6))
         self.screen.blit(surf_logo, rect_logo)
 
-        # 3. Texte Dev (Fade In encore plus retardé)
+        # 3. Dev Text (even more delayed Fade In)
         alpha_txt2 = 0
         if elapsed > 2 * self.DURATION / 3:
             alpha_txt2 = int((elapsed - 2 * self.DURATION / 3) * self.ALPHA_SPEED)
             alpha_txt2 = max(0, min(255, alpha_txt2))
-            
+
         surf_dev = self.font_dev.render(self.text_dev, True, COLORS['white'])
         surf_dev.set_alpha(alpha_txt2)
         rect_dev = surf_dev.get_rect(center=(WIDTH // 2, HEIGHT - 100))

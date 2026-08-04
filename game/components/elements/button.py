@@ -1,66 +1,72 @@
-from game.config import *
-from game.components.constants.button_const import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
-
 import pygame
 
+from game.config import *
+from game.components.button_style import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
+
+
 class Button:
-    # Chemin des sons, à importer si tu as un sfx_manager.py
-    pygame.mixer.init()
-    # SOUND_CLICK = audio_importer(SOUND_DIR)[SOUND_CLICK_FILE]
-    # SOUND_HOVER = audio_importer(SOUND_DIR)[SOUND_HOVER_FILE]
-    
-    # Si je ne veux voir aucun problème avec PyInstaller...
-    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'yes_clicked.wav')))
-    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'hover_click.wav')))
+    """A clickable UI button with hover/click sound feedback."""
 
-    # Police doit être chargée ici ou passée en paramètre. 
-    # Le mieux est de la charger ici avec get_font().
-    
-    def __init__(self, x, y, largeur, hauteur, texte, action_liee):
-        """Initialise un bouton cliquable."""
-        self.rect = pygame.Rect(x, y, largeur, hauteur)
-        self.texte = texte
-        self.action_liee = action_liee
-        
-        # Utiliser les couleurs définies dans main_menu_content.py
-        self.couleur_inactive = BUTTON_INACTIVE_COLOR
-        self.couleur_active = BUTTON_ACTIVE_COLOR
-        self.couleur = self.couleur_inactive
-        self.est_survole = False
-        
-        # Charger la police (utilise la taille par défaut du menu)
-        # Utilisation de None pour le path et la size pour utiliser les valeurs par défaut
-        self.police = get_font(None, None)
-        
+    # Sounds shared between all buttons, loaded only once
+    # on first instantiation (not at module load time).
+    _sounds_loaded = False
+    SOUND_CLICK = None
+    SOUND_HOVER = None
 
-    def draw(self, surface, gif_image=None): 
-        """Dessine le bouton et gère l'état de survol."""
+    # Font must be loaded here or passed as a parameter.
+    # Best is to load it here with get_font().
+
+    def __init__(self, x, y, width, height, text, linked_action):
+        """Initializes a clickable button."""
+        if not Button._sounds_loaded:
+            pygame.mixer.init()
+            Button.SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'yes_clicked.wav')))
+            Button.SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'hover_click.wav')))
+            Button._sounds_loaded = True
+
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.linked_action = linked_action
+
+        # Use the colors defined in main_menu_content.py
+        self.inactive_color = BUTTON_INACTIVE_COLOR
+        self.active_color = BUTTON_ACTIVE_COLOR
+        self.color = self.inactive_color
+        self.is_hovered = False
+
+        # Load the font (uses the menu's default size)
+        # Passing None for path and size to fall back to the defaults
+        self.font = get_font(None, None)
+
+
+    def draw(self, surface, gif_image=None):
+        """Draws the button and handles the hover state."""
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
-            if not self.est_survole: 
+            if not self.is_hovered:
                 self.SOUND_HOVER.play()
-                self.est_survole = True
-            self.couleur = self.couleur_active
+                self.is_hovered = True
+            self.color = self.active_color
         else:
-            if self.est_survole: 
-                self.est_survole = False
-            self.couleur = self.couleur_inactive
+            if self.is_hovered:
+                self.is_hovered = False
+            self.color = self.inactive_color
 
-        pygame.draw.rect(surface, self.couleur, self.rect)
+        pygame.draw.rect(surface, self.color, self.rect)
 
-        # Utilisation de COLORS['white'] au lieu de BLANC
-        texte_surface = self.police.render(self.texte, True, COLORS['white']) 
-        texte_rect = texte_surface.get_rect(center=self.rect.center)
-        surface.blit(texte_surface, texte_rect)
+        # Using COLORS['white'] instead of BLANC
+        text_surface = self.font.render(self.text, True, COLORS['white'])
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
 
     def manage_event(self, event):
         """
-        Gère les événements liés au bouton (clic de souris).
-        Joue un son au clic.
+        Handles events related to the button (mouse click).
+        Plays a sound on click.
         """
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1: # Clic gauche de la souris
+            if event.button == 1: # Left mouse click
                 if self.rect.collidepoint(event.pos):
-                    self.SOUND_CLICK.play() # Joue le son de clic
-                    return self.action_liee
+                    self.SOUND_CLICK.play() # Plays the click sound
+                    return self.linked_action
         return None

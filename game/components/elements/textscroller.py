@@ -1,15 +1,18 @@
 import pygame as pg
 from game.config import *
 
+
 class TextScroller:
+    """Scrolls a fixed list of text lines horizontally across the screen."""
+
     def __init__(self):
         self.width = WIDTH
         self.height = HEIGHT
-        
-        # Chargement de la police
+
+        # Load the font
         self.font = get_font(DEFAULT_FONT_NAME, 24)
 
-        # Liste du texte à afficher
+        # List of text to display
         self.text_list = [
             "GAME OVER",
             "",
@@ -19,34 +22,34 @@ class TextScroller:
             "",
             "Press Q to Quit",
         ]
-        
-        self.x = self.width # Commence hors de l'écran à droite
-        self.speed = 1 # Vitesse de défilement
+
+        self.x = self.width # Starts off-screen on the right
+        self.speed = 1 # Scroll speed
 
     def draw_and_scroll(self, surface):
         """
-        Dessine et fait défiler le texte.
+        Draws and scrolls the text.
         """
         max_text_width = 0
 
         for i, line in enumerate(self.text_list):
-            # Rendu du texte (Couleur VERTE -> COLORS['green'])
+            # Render the text (GREEN color -> COLORS['green'])
             text_surf = self.font.render(line, True, COLORS['green'])
-            
-            # Positionnement
-            # On centre verticalement un peu en bas + décalage par ligne
+
+            # Positioning
+            # Centered vertically a bit lower + offset per line
             text_rect = text_surf.get_rect(y=self.height // 9.5 + i * 30)
             text_rect.x = self.x
-            
+
             surface.blit(text_surf, text_rect)
 
-            # Calcul pour le reset de la boucle
+            # Track the widest line to know when to reset the loop
             if text_rect.width > max_text_width:
                 max_text_width = text_rect.width
 
-        # Mise à jour de la position
+        # Update the position
         self.x -= self.speed
 
-        # Réinitialise la position si tout le texte est sorti de l'écran
+        # Reset the position once all the text has scrolled off-screen
         if self.x < -max_text_width:
             self.x = self.width

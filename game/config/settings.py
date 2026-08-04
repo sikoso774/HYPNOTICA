@@ -1,15 +1,15 @@
-# Fichier: game/config/settings.py
+# File: game/config/settings.py
 import os
 import math
 from os.path import join
 
-# --- Configuration Fenêtre ---
+# --- Window Configuration ---
 WIDTH = 800# (800 + 220)
 HEIGHT = 600
 FPS = 60
 GAME_TITLE = "Hypnotica"
 
-# --- Chemins et Ressources ---
+# --- Paths and Resources ---
 # Base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ASSETS_DIR = os.path.join("assets")
@@ -19,34 +19,34 @@ FONTS_DIR = os.path.join(ASSETS_DIR, "fonts")
 
 DEFAULT_FONT_NAME = os.path.join(FONTS_DIR, "MINDCONTROL.ttf")
 
-# --- Couleurs (Palette Globale) ---
+# --- Colors (Global Palette) ---
 # global colors palette
 COLORS = {
     'white': (255, 255, 255),
     'black': (0, 0, 0),
     'gray': (100, 100, 100),
-        
+
     # RGB
     'red': (255, 0, 0),
     'green': (0, 255, 0),
     'blue': (0, 0, 255),
-        
+
     # Secondary solors
     'cyan': (0, 255, 255),
     'magenta': (255, 0, 255),
     'yellow': (255, 255, 0),
-        
+
     # Others colors
     'dark_gray': (50, 50, 50),
     'orange': (181, 83, 38),
     'purple': (127, 0, 255),
-        
+
     # Personal colors
     'ui_text': (255, 255, 255),
     'ui_hover': (200, 200, 200),
 }
 
-# --- Gameplay & Physique  ---
+# --- Gameplay & Physics  ---
 GRAVITY = 0.8
 JUMP_STRENGTH = -15
 
@@ -62,7 +62,7 @@ PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
 
-# Phone settings 
+# Phone settings
 PHONE_DATA = {
     'size': 30,
     'speed': 200,

@@ -1,12 +1,9 @@
-# Constantes des fenêtres
-from .constants.credits_const import *
-from .constants.instruction_const import *
-from .constants.button_const import *
-from .constants.mainmenu_const import *
+# Shared button style
+from .button_style import *
 
-# Elements du jeu
+# Game elements
 from .elements.button import Button
 from .elements.textscroller import TextScroller
 
 # Sprites
-from .sprites.animation_gif import Animation_GIF
+from .animation_gif import AnimationGif

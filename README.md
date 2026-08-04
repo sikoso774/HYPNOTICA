@@ -8,7 +8,8 @@ My first video game, built with [`pygame-ce`](https://pyga.me/). This version (`
 
 - **Custom raycasting engine** (`game/raycasting_engine/`): DDA ray-by-ray projection, fisheye correction, and distance-based grayscale shading.
 - **Smooth frame-rate independent movement** (WASD/ZQSD + arrows), with wall sliding.
-- **State machine** driving screen transitions (intro, menu, instructions, game, game over, credits).
+- **World map** (`game/core/levels/world_map.py`): a Super Mario World-style level-select screen, reinterpreted as a hypnotic spiral descent. Only the first depth is unlocked today — the rest preview levels to come.
+- **State machine** driving screen transitions (intro, menu, world map, instructions, game, game over, credits).
 - **Centralized audio management** (per-screen music, sound effects) via `Sound`.
 
 ## 🚀 Installation & Launch
@@ -27,13 +28,13 @@ HYPNOTICA/
 ├── assets/                    # Images, audio, fonts
 ├── game/
 │   ├── components/            # UI for the menu + game over screens
-│   │   ├── constants/          # Layout constants per screen
-│   │   ├── elements/           # Button, TextScroller
-│   │   └── sprites/            # Animated GIF (main-menu background)
+│   │   ├── button_style.py     # Shared button dimensions/colors
+│   │   ├── animation_gif.py    # Animated GIF (main-menu background)
+│   │   └── elements/           # Button, TextScroller
 │   ├── config/                 # Global settings, audio manager, utilities
 │   ├── core/
 │   │   ├── screens/             # Intro, MainMenu, Instructions, Credits, GameOver, BaseScreen
-│   │   └── levels/              # Level_3D (raycasting, active)
+│   │   └── levels/              # level_3d.py (Level3D, active), world_map.py (level select)
 │   └── raycasting_engine/      # Map, Player, RayCasting (DDA engine)
 ├── main.py                     # Entry point: Game class (state machine)
 └── README.md
@@ -41,16 +42,19 @@ HYPNOTICA/
 
 ## 🔄 Screens & Flow
 
-Each screen is a state handled by `main.py`'s state machine (`game/core/screens/`, `Level_3D`). Here's what each one does and how you move between them:
+Each screen is a state handled by `main.py`'s state machine (`game/core/screens/`, `Level3D`). Here's what each one does and how you move between them:
 
 | Screen | State key | Description | Goes to |
 |---|---|---|---|
-| **Intro** | `start` | Fading splash sequence (dev logo, credits image, pygame logo). Auto-advances, or skip with `Space`/`Esc`. | → `menu` |
-| **Main Menu** | `menu` | Animated GIF background with 4 buttons: JOUER, INSTRUCTIONS, CREDITS, QUITTER. | → `game` / `instructions` / `credits` / quit |
-| **Instructions** | `instructions` | Typewriter-animated rules text. `Space` skips the animation, then returns; `Esc` returns immediately. | → `menu` |
-| **Gameplay (3D)** | `game` | The raycasting level (`Level_3D`). 60-second timer; reaching zero ends the run. | → `game_over` |
+| **Intro** | `start` | Fading splash sequence (dev logo, credits image, pygame logo). Auto-advances, or skip with `Space`. | → `menu` |
+| **Main Menu** | `menu` | Animated GIF background with 4 buttons: JOUER, INSTRUCTIONS, CREDITS, QUITTER. | → `world_map` / `instructions` / `credits` / quit |
+| **World Map** | `world_map` | Level-select spiral. Arrow keys/mouse to pick a depth, `Enter`/click to enter (only if unlocked), `M` back to menu. | → `game` / `menu` |
+| **Instructions** | `instructions` | Typewriter-animated rules text. `Space` skips the animation, then returns. | → `menu` |
+| **Gameplay (3D)** | `game` | The raycasting level (`Level3D`). 60-second timer; reaching zero ends the run. | → `game_over` |
 | **Game Over** | `game_over` | Scrolling text over a game-over background. `R` restarts, `A` jumps to credits, `Q` quits. | → `menu` / `credits` / quit |
-| **Credits** | `credits` | Auto-scrolling credits list. `M`/`Esc` returns to the menu, `Q` quits. | → `menu` / quit |
+| **Credits** | `credits` | Auto-scrolling credits list. `M` returns to the menu, `Q` quits. | → `menu` / quit |
+
+`Esc` quits the whole game immediately from any screen (`BaseScreen.check_events()` handles it globally, before a screen's own `Esc` logic — if any — would run).
 
 ## 📜 License
 
