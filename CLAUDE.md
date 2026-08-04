@@ -29,7 +29,7 @@ All screens subclass `BaseScreen` (`game/core/screens/base_screen.py`), which im
 
 ### Raycasting engine (`game/raycasting_engine/`)
 
-This is the active gameplay path, wired up as `Level_3D` (`game/core/levels/level_2.py`, exported from `game/core/__init__.py`). It composes three pieces each frame:
+This is the active gameplay path, wired up as `Level_3D` (`game/core/level_3d.py`, exported from `game/core/__init__.py`). It composes three pieces each frame:
 - `Map` (`map.py`) — a hardcoded `mini_map` grid converted into a `world_map` dict of `(x, y) -> wall_id` for O(1) collision/wall lookups.
 - `Player` (`player.py`) — position/angle in map (tile) coordinates, WASD/ZQSD + arrow-key movement scaled by `game.dt`, with axis-separated wall sliding via `check_wall_collision`.
 - `RayCasting` (`engine.py`) — DDA-style raycaster (horizontal/vertical grid intersections compared per ray) that fisheye-corrects depth and draws vertical wall slices directly with `pg.draw.rect` (no textures yet — shading is distance-based grayscale).
@@ -42,7 +42,7 @@ All raycasting math constants (`FOV`, `NUM_RAYS`, `MAX_DEPTH`, `SCREEN_DIST`, `T
 
 ### Components (`game/components/`)
 
-Used by `MainMenu` and `GameOver`: per-screen layout constants (`components/constants/`), UI elements (`Button`, `TextScroller`), and `sprites/animation_gif.py` (`Animation_GIF`, used for the main-menu GIF background).
+Used by `MainMenu` and `GameOver`: `button_style.py` (shared button dimensions/colors), `elements/` (`Button`, `TextScroller`), and `animation_gif.py` (`Animation_GIF`, used for the main-menu GIF background). Screen-specific content (`INSTRUCTIONS_CONTENT`, `CREDITS_CONTENT`, `BUTTONS_MENU`) lives directly in its screen file (`game/core/screens/instructions.py`, `credits.py`, `mainmenu.py`) rather than in a separate constants module, since each is only ever used by one screen.
 
 ### Assets
 

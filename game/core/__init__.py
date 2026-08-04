@@ -5,4 +5,4 @@ from .screens.mainmenu import MainMenu
 from .screens.game_over import GameOver
 from .screens.credits import Credits
 
-from .levels.level_2 import Level_3D
+from .level_3d import Level_3D

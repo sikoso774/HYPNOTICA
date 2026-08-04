@@ -4,23 +4,32 @@ from game.config.settings import *
 from game.components import *
 from .base_screen import BaseScreen  # Import de la classe mère
 
+# Configuration des boutons du menu (Texte, Action, Position Y)
+START_Y = HEIGHT // 2 - 50
+BUTTONS_MENU = [
+    {'text': 'JOUER', 'action': 'game', 'y_offset': START_Y},
+    {'text': 'INSTRUCTIONS', 'action': 'instructions', 'y_offset': START_Y + (BUTTON_HEIGHT + BUTTON_SPACING)},
+    {'text': 'CREDITS', 'action': 'credits', 'y_offset': START_Y + (BUTTON_HEIGHT + BUTTON_SPACING) * 2},
+    {'text': 'QUITTER', 'action': 'quit', 'y_offset': START_Y + (BUTTON_HEIGHT + BUTTON_SPACING) * 3},
+]
+
 class MainMenu(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
         self.music_name = 'menu'  # Référence à la clé dans SoundHandler
-        
+
         # 1. Assets (GIF)
         GIF_PATH = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
         self.gif_animator = Animation_GIF(GIF_PATH, self.screen)
-        
+
         # 2. Boutons
         self.buttons = []
         # On centre les boutons par rapport à la largeur de l'écran
-        center_x = self.screen.get_width() // 2 - BUTTON_WITDH // 2
-        
+        center_x = self.screen.get_width() // 2 - BUTTON_WIDTH // 2
+
         for bouton_data in BUTTONS_MENU:
             self.buttons.append(
-                Button(center_x, bouton_data['y_offset'], BUTTON_WITDH, BUTTON_HEIGHT, 
+                Button(center_x, bouton_data['y_offset'], BUTTON_WIDTH, BUTTON_HEIGHT,
                        bouton_data['text'], bouton_data['action'])
             )
 

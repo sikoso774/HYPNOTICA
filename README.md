@@ -27,13 +27,13 @@ HYPNOTICA/
 ├── assets/                    # Images, audio, fonts
 ├── game/
 │   ├── components/            # UI for the menu + game over screens
-│   │   ├── constants/          # Layout constants per screen
-│   │   ├── elements/           # Button, TextScroller
-│   │   └── sprites/            # Animated GIF (main-menu background)
+│   │   ├── button_style.py     # Shared button dimensions/colors
+│   │   ├── animation_gif.py    # Animated GIF (main-menu background)
+│   │   └── elements/           # Button, TextScroller
 │   ├── config/                 # Global settings, audio manager, utilities
 │   ├── core/
 │   │   ├── screens/             # Intro, MainMenu, Instructions, Credits, GameOver, BaseScreen
-│   │   └── levels/              # Level_3D (raycasting, active)
+│   │   └── level_3d.py          # Level_3D (raycasting, active)
 │   └── raycasting_engine/      # Map, Player, RayCasting (DDA engine)
 ├── main.py                     # Entry point: Game class (state machine)
 └── README.md

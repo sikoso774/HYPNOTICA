@@ -1,7 +1,7 @@
 # Fichier: game/core/game_over.py
 import pygame as pg
 from game.config import *
-from game.components import Button, BUTTON_WITDH, BUTTON_HEIGHT, BUTTON_SPACING
+from game.components import Button, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_SPACING
 from game.core.screens import BaseScreen # Import de la nouvelle classe mère
 
 class GameOver(BaseScreen):
@@ -31,16 +31,16 @@ class GameOver(BaseScreen):
         self.font_title = get_font(DEFAULT_FONT_NAME, 64)
 
     def _build_buttons(self):
-        center_x = WIDTH // 2 - BUTTON_WITDH // 2
+        center_x = WIDTH // 2 - BUTTON_WIDTH // 2
         start_y = HEIGHT // 2 - BUTTON_HEIGHT // 2
 
         self.buttons = [
-            Button(center_x, start_y, BUTTON_WITDH, BUTTON_HEIGHT,
+            Button(center_x, start_y, BUTTON_WIDTH, BUTTON_HEIGHT,
                    "REJOUER", "game"),
             Button(center_x, start_y + (BUTTON_HEIGHT + BUTTON_SPACING),
-                   BUTTON_WITDH, BUTTON_HEIGHT, "CREDITS", "credits"),
+                   BUTTON_WIDTH, BUTTON_HEIGHT, "CREDITS", "credits"),
             Button(center_x, start_y + (BUTTON_HEIGHT + BUTTON_SPACING) * 2,
-                   BUTTON_WITDH, BUTTON_HEIGHT, "QUITTER", "quit"),
+                   BUTTON_WIDTH, BUTTON_HEIGHT, "QUITTER", "quit"),
         ]
 
     def on_event(self, event):
