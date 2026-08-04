@@ -10,7 +10,8 @@ class Level_3D(BaseScreen):
         # Charge la police pour le Timer (utilise celle des settings ou celle par défaut)
         try:
             self.font = pg.font.Font(DEFAULT_FONT_NAME, 40)
-        except:
+        except Exception as e:
+            print(f"Erreur de chargement de la police: {e}")
             self.font = pg.font.Font(None, 40)
         self.reset()
 

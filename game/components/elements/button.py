@@ -4,20 +4,23 @@ from game.components.button_style import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_CO
 import pygame
 
 class Button:
-    # Chemin des sons, à importer si tu as un sfx_manager.py
-    pygame.mixer.init()
-    # SOUND_CLICK = audio_importer(SOUND_DIR)[SOUND_CLICK_FILE]
-    # SOUND_HOVER = audio_importer(SOUND_DIR)[SOUND_HOVER_FILE]
-    
-    # Si je ne veux voir aucun problème avec PyInstaller...
-    SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'yes_clicked.wav')))
-    SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'hover_click.wav')))
+    # Sons partagés entre tous les boutons, chargés une seule fois
+    # à la première instanciation (pas au chargement du module).
+    _sounds_loaded = False
+    SOUND_CLICK = None
+    SOUND_HOVER = None
 
-    # Police doit être chargée ici ou passée en paramètre. 
+    # Police doit être chargée ici ou passée en paramètre.
     # Le mieux est de la charger ici avec get_font().
-    
+
     def __init__(self, x, y, width, height, text, linked_action):
         """Initialise un bouton cliquable."""
+        if not Button._sounds_loaded:
+            pygame.mixer.init()
+            Button.SOUND_CLICK = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'yes_clicked.wav')))
+            Button.SOUND_HOVER = pygame.mixer.Sound(get_resource_path(join(AUDIO_DIR, 'sounds', 'hover_click.wav')))
+            Button._sounds_loaded = True
+
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.linked_action = linked_action
