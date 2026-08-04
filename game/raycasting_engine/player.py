@@ -19,13 +19,23 @@ class Player:
         speed_cos = speed * cos_a
 
         keys = pg.key.get_pressed()
-        if keys[pg.K_z] or keys[pg.K_w]: dx += speed_cos; dy += speed_sin
-        if keys[pg.K_s]: dx -= speed_cos; dy -= speed_sin
-        if keys[pg.K_q] or keys[pg.K_a]: dx += speed_sin; dy -= speed_cos
-        if keys[pg.K_d]: dx -= speed_sin; dy += speed_cos
+        if keys[pg.K_z] or keys[pg.K_w]:
+            dx += speed_cos
+            dy += speed_sin
+        if keys[pg.K_s]:
+            dx -= speed_cos
+            dy -= speed_sin
+        if keys[pg.K_q] or keys[pg.K_a]:
+            dx += speed_sin
+            dy -= speed_cos
+        if keys[pg.K_d]:
+            dx -= speed_sin
+            dy += speed_cos
 
-        if keys[pg.K_LEFT]: self.angle -= PLAYER_ROT_SPEED * self.game.dt
-        if keys[pg.K_RIGHT]: self.angle += PLAYER_ROT_SPEED * self.game.dt
+        if keys[pg.K_LEFT]:
+            self.angle -= PLAYER_ROT_SPEED * self.game.dt
+        if keys[pg.K_RIGHT]:
+            self.angle += PLAYER_ROT_SPEED * self.game.dt
 
         self.check_wall_collision(dx, dy)
         self.angle %= math.tau
@@ -35,16 +45,21 @@ class Player:
 
     def check_wall_collision(self, dx, dy):
         # Collision glissante simple
-        if self.check_wall(int(self.x + dx * 3), int(self.y)): self.x += dx
-        if self.check_wall(int(self.x), int(self.y + dy * 3)): self.y += dy
+        if self.check_wall(int(self.x + dx * 3), int(self.y)):
+            self.x += dx
+        if self.check_wall(int(self.x), int(self.y + dy * 3)):
+            self.y += dy
 
     def update(self):
         self.movement()
 
     @property
-    def pos(self): return self.x, self.y
+    def pos(self):
+        return self.x, self.y
+
     @property
-    def map_pos(self): return int(self.x), int(self.y)
+    def map_pos(self):
+        return int(self.x), int(self.y)
 
     def draw(self):
         # Debug 2D

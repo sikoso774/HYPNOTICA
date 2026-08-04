@@ -1,7 +1,7 @@
+import pygame
+
 from game.config import *
 from game.components.button_style import BUTTON_ACTIVE_COLOR, BUTTON_INACTIVE_COLOR
-
-import pygame
 
 class Button:
     # Sons partagés entre tous les boutons, chargés une seule fois

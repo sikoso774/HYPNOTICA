@@ -3,7 +3,7 @@ from game.core.screens import BaseScreen
 from game.config.settings import *
 from game.raycasting_engine import *
 
-class Level_3D(BaseScreen):
+class Level3D(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
         self.music_name = 'game'

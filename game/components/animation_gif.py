@@ -3,7 +3,7 @@ from ..config.settings import *
 
 HYPNOSIS_FOLDER_NAME = "hypnose_frames"
 
-class Animation_GIF:
+class AnimationGif:
     def __init__(self, folder_path, screen):
         self.screen = screen
         self.folder_path = folder_path

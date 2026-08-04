@@ -47,11 +47,13 @@ class BaseScreen:
         while self.running:
             # 1. Events
             action = self.check_events()
-            if action: return action
+            if action:
+                return action
 
             # 2. Update : Modifié pour capturer un retour (ex: fin d'intro)
             update_action = self.update()
-            if update_action: return update_action # Si update renvoie "menu", on sort !
+            if update_action:
+                return update_action  # Si update renvoie "menu", on sort !
 
             # 3. Draw
             self.draw()

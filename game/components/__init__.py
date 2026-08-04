@@ -6,4 +6,4 @@ from .elements.button import Button
 from .elements.textscroller import TextScroller
 
 # Sprites
-from .animation_gif import Animation_GIF
+from .animation_gif import AnimationGif

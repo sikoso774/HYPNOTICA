@@ -3,7 +3,7 @@ import sys
 
 # Config du jeu
 from game.config import *
-from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level_3D, WorldMap
+from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level3D, WorldMap
 
 class Game:
     def __init__(self):
@@ -20,7 +20,7 @@ class Game:
         self.intro = Intro(self)
         self.main_menu = MainMenu(self)
         self.world_map = WorldMap(self)
-        self.level = Level_3D(self)
+        self.level = Level3D(self)
         self.game_over = GameOver(self)
         self.instruction = Instructions(self)
         self.credits = Credits(self)
@@ -40,7 +40,7 @@ class Game:
                 
         elif self.current_state == 'game':
             # On recrée le niveau pour reset la partie (optionnel)
-            self.level = Level_3D(self) 
+            self.level = Level3D(self) 
             action = self.level.run()
             
         elif self.current_state == 'game_over':

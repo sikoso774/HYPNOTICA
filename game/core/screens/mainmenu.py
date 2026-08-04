@@ -20,7 +20,7 @@ class MainMenu(BaseScreen):
 
         # 1. Assets (GIF)
         GIF_PATH = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
-        self.gif_animator = Animation_GIF(GIF_PATH, self.screen)
+        self.gif_animator = AnimationGif(GIF_PATH, self.screen)
 
         # 2. Boutons
         self.buttons = []
