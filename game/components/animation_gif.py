@@ -1,5 +1,5 @@
 import pygame as pg
-from ...config.settings import * 
+from ..config.settings import *
 
 HYPNOSE_FOLDER_NAME = "hypnose_frames"
 
