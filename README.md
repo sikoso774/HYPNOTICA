@@ -33,7 +33,7 @@ HYPNOTICA/
 │   ├── config/                 # Global settings, audio manager, utilities
 │   ├── core/
 │   │   ├── screens/             # Intro, MainMenu, Instructions, Credits, GameOver, BaseScreen
-│   │   └── level_3d.py          # Level_3D (raycasting, active)
+│   │   └── levels/              # level_3d.py (Level_3D, active) — more to come (overworld map)
 │   └── raycasting_engine/      # Map, Player, RayCasting (DDA engine)
 ├── main.py                     # Entry point: Game class (state machine)
 └── README.md

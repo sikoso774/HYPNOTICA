@@ -29,7 +29,7 @@ All screens subclass `BaseScreen` (`game/core/screens/base_screen.py`), which im
 
 ### Raycasting engine (`game/raycasting_engine/`)
 
-This is the active gameplay path, wired up as `Level_3D` (`game/core/level_3d.py`, exported from `game/core/__init__.py`). It composes three pieces each frame:
+This is the active gameplay path, wired up as `Level_3D` (`game/core/levels/level_3d.py`, exported from `game/core/__init__.py`). `levels/` is kept as its own directory even with a single file today, since a future overworld/level-select map (Super Mario World-style) will add more files there. It composes three pieces each frame:
 - `Map` (`map.py`) — a hardcoded `mini_map` grid converted into a `world_map` dict of `(x, y) -> wall_id` for O(1) collision/wall lookups.
 - `Player` (`player.py`) — position/angle in map (tile) coordinates, WASD/ZQSD + arrow-key movement scaled by `game.dt`, with axis-separated wall sliding via `check_wall_collision`.
 - `RayCasting` (`engine.py`) — DDA-style raycaster (horizontal/vertical grid intersections compared per ray) that fisheye-corrects depth and draws vertical wall slices directly with `pg.draw.rect` (no textures yet — shading is distance-based grayscale).
