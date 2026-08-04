@@ -1,11 +1,5 @@
 from game.config import *
-
-# Dimensions des boutons (peuvent rester ici car spécifiques au menu)
-BUTTON_WITDH = 250
-BUTTON_HEIGHT = 60
-BUTTON_SPACING = 20
-BUTTON_ACTIVE_COLOR  = COLORS['orange']
-BUTTON_INACTIVE_COLOR  = COLORS['gray']
+from .button_const import *
 
 # Calcul dynamique du point de départ vertical (centré ou décalé)
 START_Y = HEIGHT // 2 - 50

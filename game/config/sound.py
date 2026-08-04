@@ -25,6 +25,8 @@ class Sound:
         self.sfx = {}
         self._load_sfx()
 
+        self.current_track = None
+
     def _load_sfx(self):
         """Charge les effets sonores en mémoire."""
         sfx_files = {
@@ -50,22 +52,18 @@ class Sound:
             print(f"Erreur: Piste musicale inconnue '{track_key}'")
             return
 
+        # Si la même piste est déjà en cours (ex: intro -> menu), on la laisse jouer.
+        if track_key == self.current_track and pg.mixer.music.get_busy():
+            return
+
         filename = self.music_tracks[track_key]
         full_path = join(self.audio_dir, filename)
-
-        # Vérification si la musique joue déjà pour éviter de la redémarrer
-        # Note: Cela compare le fichier en cours si pygame le permettait, 
-        # mais ici on utilise une logique simplifiée.
-        # Si la musique est déjà lancée (ex: intro -> menu avec la même musique), on laisse couler.
-        if pg.mixer.music.get_busy():
-            # Ici, on pourrait ajouter une logique pour vérifier si c'est la MÊME musique
-            # Pour l'instant, on suppose que si on appelle play_music, c'est pour changer ou forcer le start.
-            pass
 
         try:
             pg.mixer.music.load(full_path)
             pg.mixer.music.play(-1)
             pg.mixer.music.set_volume(0.5)
+            self.current_track = track_key
         except pg.error as e:
             print(f"Erreur chargement musique ({full_path}): {e}")
 

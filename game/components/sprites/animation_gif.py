@@ -42,7 +42,7 @@ class Animation_GIF:
             if not frames:
                 print(f"ALERTE : Aucune image trouvée dans le dossier GIF : {folder_path}")
                 # Créez une surface noire de secours pour éviter le crash
-                placeholder = pg.Surface((WINDOW_HEIGHT, WINDOW_HEIGHT))
+                placeholder = pg.Surface((self.screen.get_width(), self.screen.get_height()))
                 placeholder.fill(COLORS['black'])
                 frames.append(placeholder)
                 
