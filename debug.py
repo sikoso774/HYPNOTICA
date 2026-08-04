@@ -7,7 +7,7 @@ from main import Game
 
 # Screens imports
 from game.core.screens import *
-from game.core import Level_3D
+from game.core import Level_3D, WorldMap
 
 class Debugger:
     def __init__(self):
@@ -18,6 +18,7 @@ class Debugger:
             "4": ("Jeu (Level)", Level_3D),
             "5": ("Game Over", GameOver),
             "6": ("Crédits", Credits),
+            "7": ("Carte des profondeurs", WorldMap),
         }
     
     def run_debug(self):

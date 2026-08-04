@@ -6,3 +6,4 @@ from .screens.game_over import GameOver
 from .screens.credits import Credits
 
 from .levels.level_3d import Level_3D
+from .levels.world_map import WorldMap
