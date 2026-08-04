@@ -3,7 +3,7 @@ import sys
 
 # Config du jeu
 from game.config import *
-from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level_3D
+from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level_3D, WorldMap
 
 class Game:
     def __init__(self):
@@ -19,6 +19,7 @@ class Game:
         self.sound = Sound(self)
         self.intro = Intro(self)
         self.main_menu = MainMenu(self)
+        self.world_map = WorldMap(self)
         self.level = Level_3D(self)
         self.game_over = GameOver(self)
         self.instruction = Instructions(self)
@@ -30,6 +31,8 @@ class Game:
             action = self.intro.run()   
         elif self.current_state == 'menu':
             action = self.main_menu.run()
+        elif self.current_state == 'world_map':
+            action = self.world_map.run()
         elif self.current_state == 'instructions':
             action = self.instruction.run()   
         elif self.current_state == 'credits':

@@ -21,7 +21,7 @@ There is no test suite, linter, or build/packaging step configured. `test.py` at
 
 ### Entry point and state machine
 
-`main.py` defines the `Game` class, which owns the `pg.display` surface, the shared `Sound` manager, and `delta_time`. `Game.run()` is a simple state-machine loop keyed by `self.current_state` (`'start'`, `'menu'`, `'instructions'`, `'credits'`, `'game'`, `'game_over'`), each mapped to a screen object built in `Game.setup()`. Screens return either `None` (stay), an action string (transition to that state), or `'quit'`. Note: entering `'game'` recreates `self.level = Level_3D(self)` every time to reset the run.
+`main.py` defines the `Game` class, which owns the `pg.display` surface, the shared `Sound` manager, and `delta_time`. `Game.run()` is a simple state-machine loop keyed by `self.current_state` (`'start'`, `'menu'`, `'world_map'`, `'instructions'`, `'credits'`, `'game'`, `'game_over'`), each mapped to a screen object built in `Game.setup()`. Screens return either `None` (stay), an action string (transition to that state), or `'quit'`. Note: entering `'game'` recreates `self.level = Level_3D(self)` every time to reset the run.
 
 ### Screens (`game/core/screens/`)
 
@@ -29,12 +29,16 @@ All screens subclass `BaseScreen` (`game/core/screens/base_screen.py`), which im
 
 ### Raycasting engine (`game/raycasting_engine/`)
 
-This is the active gameplay path, wired up as `Level_3D` (`game/core/levels/level_3d.py`, exported from `game/core/__init__.py`). `levels/` is kept as its own directory even with a single file today, since a future overworld/level-select map (Super Mario World-style) will add more files there. It composes three pieces each frame:
+This is the active gameplay path, wired up as `Level_3D` (`game/core/levels/level_3d.py`, exported from `game/core/__init__.py`). It composes three pieces each frame:
 - `Map` (`map.py`) — a hardcoded `mini_map` grid converted into a `world_map` dict of `(x, y) -> wall_id` for O(1) collision/wall lookups.
 - `Player` (`player.py`) — position/angle in map (tile) coordinates, WASD/ZQSD + arrow-key movement scaled by `game.dt`, with axis-separated wall sliding via `check_wall_collision`.
 - `RayCasting` (`engine.py`) — DDA-style raycaster (horizontal/vertical grid intersections compared per ray) that fisheye-corrects depth and draws vertical wall slices directly with `pg.draw.rect` (no textures yet — shading is distance-based grayscale).
 
 All raycasting math constants (`FOV`, `NUM_RAYS`, `MAX_DEPTH`, `SCREEN_DIST`, `TILE_SIZE`, etc.) live in `game/config/settings.py` and are derived from `WIDTH`/`HEIGHT` at import time — changing `WIDTH`/`HEIGHT` requires these derived constants to stay consistent, so edit them in settings.py rather than overriding downstream.
+
+### World map (`game/core/levels/world_map.py`)
+
+`WorldMap` is the level-select screen between the main menu and `Level_3D`, wired as the `'world_map'` state (`MainMenu`'s JOUER button goes there, not straight to `'game'`). It's a Super Mario World-style node map reinterpreted as a hypnotic descent: a `NODES` list (module-level, screen-local like `BUTTONS_MENU`) placed along an Archimedean spiral computed in `_build_path`/`_place_nodes`, with nodes spaced by arc length (not by angle) so they don't bunch up near the spiral's center. Only the first node is unlocked today (`action: 'game'`); the rest are locked placeholders for future levels — arrow keys/mouse move the selection, Enter/click confirms (only if unlocked), `M` returns to the menu. Note: `BaseScreen.check_events()` intercepts `Esc` globally to quit the whole game before any screen's `on_event` sees it, so `Esc`-to-go-back handlers elsewhere (e.g. `Credits`) are unreachable dead code — `WorldMap` deliberately uses `M` instead and doesn't advertise `Esc` in its own hint text.
 
 ### Config (`game/config/`)
 
