@@ -42,8 +42,8 @@ def display_text_center(surface, text, color, y, font_path=None, font_size=None)
     Affiche du texte centré horizontalement sur l'écran.
     """
     # Utilisation de la nouvelle fonction de cache
-    police_font = get_font(font_path, font_size)
+    font = get_font(font_path, font_size)
 
-    text_surf = police_font.render(text, True, color)
-    texte_rect = text_surf.get_rect(center=(WIDTH // 2, y))
-    surface.blit(text_surf, texte_rect)
+    text_surf = font.render(text, True, color)
+    text_rect = text_surf.get_rect(center=(WIDTH // 2, y))
+    surface.blit(text_surf, text_rect)

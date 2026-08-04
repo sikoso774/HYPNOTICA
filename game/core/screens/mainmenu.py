@@ -27,10 +27,10 @@ class MainMenu(BaseScreen):
         # On centre les boutons par rapport à la largeur de l'écran
         center_x = self.screen.get_width() // 2 - BUTTON_WIDTH // 2
 
-        for bouton_data in BUTTONS_MENU:
+        for button_data in BUTTONS_MENU:
             self.buttons.append(
-                Button(center_x, bouton_data['y_offset'], BUTTON_WIDTH, BUTTON_HEIGHT,
-                       bouton_data['text'], bouton_data['action'])
+                Button(center_x, button_data['y_offset'], BUTTON_WIDTH, BUTTON_HEIGHT,
+                       button_data['text'], button_data['action'])
             )
 
     def on_event(self, event):

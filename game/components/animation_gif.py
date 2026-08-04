@@ -1,7 +1,7 @@
 import pygame as pg
 from ..config.settings import *
 
-HYPNOSE_FOLDER_NAME = "hypnose_frames"
+HYPNOSIS_FOLDER_NAME = "hypnose_frames"
 
 class Animation_GIF:
     def __init__(self, folder_path, screen):
