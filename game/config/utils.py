@@ -1,18 +1,18 @@
 import os
 import sys
 import pygame as pg
-from .settings import * 
+from .settings import *
 
-# Cache pour stocker les objets police
+# Cache for storing font objects
 _font_cache = {}
 
 def get_resource_path(relative_path):
     """
-    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
-    (si l'exe est compilé) et le développement standard.
+    Returns the absolute path of a resource, compatible with PyInstaller
+    (if the exe is built) and standard development.
     """
     try:
-        # PyInstaller crée un dossier temporaire et stocke le chemin dans _MEIPASS
+        # PyInstaller creates a temporary folder and stores the path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
@@ -20,8 +20,8 @@ def get_resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def get_font(font_path, size):
-    """Charge ou récupère une police depuis un cache."""
-    # ... (Le contenu de la fonction de cache de police est déplacé/réutilisé ici)
+    """Loads or retrieves a font from a cache."""
+    # ... (the font caching logic is moved/reused here)
     final_font_path = font_path if font_path is not None else DEFAULT_FONT_NAME
     final_font_size = size if size is not None else 25
     font_key = (final_font_path, final_font_size)
@@ -31,17 +31,17 @@ def get_font(font_path, size):
             abs_font_path = get_resource_path(final_font_path)
             _font_cache[font_key] = pg.font.Font(abs_font_path, final_font_size)
         except Exception as e:
-            print(f"Erreur de chargement de la police: {e}")
-            _font_cache[font_key] = pg.font.SysFont(None, final_font_size) 
+            print(f"Error loading font: {e}")
+            _font_cache[font_key] = pg.font.SysFont(None, final_font_size)
 
     return _font_cache[font_key]
 
 
 def display_text_center(surface, text, color, y, font_path=None, font_size=None):
     """
-    Affiche du texte centré horizontalement sur l'écran.
+    Displays horizontally centered text on the screen.
     """
-    # Utilisation de la nouvelle fonction de cache
+    # Using the new caching function
     font = get_font(font_path, font_size)
 
     text_surf = font.render(text, True, color)

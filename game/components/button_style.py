@@ -1,6 +1,6 @@
 from game.config import *
 
-# Dimensions et couleurs par défaut des boutons (partagées entre écrans)
+# Default button dimensions and colors (shared across screens)
 BUTTON_WIDTH = 250
 BUTTON_HEIGHT = 60
 BUTTON_SPACING = 20

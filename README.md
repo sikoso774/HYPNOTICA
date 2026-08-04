@@ -34,7 +34,7 @@ HYPNOTICA/
 │   ├── config/                 # Global settings, audio manager, utilities
 │   ├── core/
 │   │   ├── screens/             # Intro, MainMenu, Instructions, Credits, GameOver, BaseScreen
-│   │   └── levels/              # level_3d.py (Level_3D, active), world_map.py (level select)
+│   │   └── levels/              # level_3d.py (Level3D, active), world_map.py (level select)
 │   └── raycasting_engine/      # Map, Player, RayCasting (DDA engine)
 ├── main.py                     # Entry point: Game class (state machine)
 └── README.md
@@ -42,7 +42,7 @@ HYPNOTICA/
 
 ## 🔄 Screens & Flow
 
-Each screen is a state handled by `main.py`'s state machine (`game/core/screens/`, `Level_3D`). Here's what each one does and how you move between them:
+Each screen is a state handled by `main.py`'s state machine (`game/core/screens/`, `Level3D`). Here's what each one does and how you move between them:
 
 | Screen | State key | Description | Goes to |
 |---|---|---|---|
@@ -50,7 +50,7 @@ Each screen is a state handled by `main.py`'s state machine (`game/core/screens/
 | **Main Menu** | `menu` | Animated GIF background with 4 buttons: JOUER, INSTRUCTIONS, CREDITS, QUITTER. | → `world_map` / `instructions` / `credits` / quit |
 | **World Map** | `world_map` | Level-select spiral. Arrow keys/mouse to pick a depth, `Enter`/click to enter (only if unlocked), `M` back to menu. | → `game` / `menu` |
 | **Instructions** | `instructions` | Typewriter-animated rules text. `Space` skips the animation, then returns. | → `menu` |
-| **Gameplay (3D)** | `game` | The raycasting level (`Level_3D`). 60-second timer; reaching zero ends the run. | → `game_over` |
+| **Gameplay (3D)** | `game` | The raycasting level (`Level3D`). 60-second timer; reaching zero ends the run. | → `game_over` |
 | **Game Over** | `game_over` | Scrolling text over a game-over background. `R` restarts, `A` jumps to credits, `Q` quits. | → `menu` / `credits` / quit |
 | **Credits** | `credits` | Auto-scrolling credits list. `M` returns to the menu, `Q` quits. | → `menu` / quit |
 

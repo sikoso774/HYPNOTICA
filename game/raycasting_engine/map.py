@@ -1,9 +1,9 @@
 import pygame as pg
-from game.config import * # Assure-toi que le chemin d'import est bon selon ta structure
+from game.config import * # Make sure the import path is correct for your structure
 
 _ = False
-# On garde ta mini_map définie dans ton fichier
-# (wall_id 1 = terracotta, 2 = pierre grise -- voir RayCasting._load_wall_textures)
+# Keeping your mini_map as defined in your file
+# (wall_id 1 = terracotta, 2 = gray stone -- see RayCasting._load_wall_textures)
 mini_map = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, _, _, 1, _, _, _, _, _, _, 1, _, _, _, _, _, 1],
@@ -17,7 +17,10 @@ mini_map = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
+
 class Map:
+    """Converts the hardcoded mini_map grid into a world_map dict for O(1) wall lookups."""
+
     def __init__(self, game):
         self.game = game
         self.mini_map = mini_map
@@ -25,17 +28,17 @@ class Map:
         self.rows = len(self.mini_map)
         self.cols = len(self.mini_map[0])
         self.get_map()
-    
+
     def get_map(self):
-        # On remplit le dictionnaire world_map avec les murs
+        # Fill the world_map dictionary with the walls
         for j, row in enumerate(self.mini_map):
             for i, value in enumerate(row):
                 if value:
                     self.world_map[(i, j)] = value
 
     def draw(self):
-        # Fonction de débogage : dessine les murs en 2D (vue de dessus)
-        # On utilise TILE_SIZE défini dans tes settings
-        [pg.draw.rect(self.game.screen, 'darkgray', 
+        # Debug function: draws the walls in 2D (top-down view)
+        # Uses TILE_SIZE defined in your settings
+        [pg.draw.rect(self.game.screen, 'darkgray',
                       (pos[0] * TILE_SIZE, pos[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 2)
          for pos in self.world_map]
