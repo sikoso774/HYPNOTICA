@@ -47,8 +47,7 @@ class Level_3D(BaseScreen):
 
         # Mise à jour du reste du jeu
         self.player.update()
-        self.raycaster.update()
-        
+
         return None
 
     def draw(self):

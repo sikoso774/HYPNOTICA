@@ -7,11 +7,7 @@ class TextScroller:
         self.height = HEIGHT
         
         # Chargement de la police
-        font_path = get_resource_path(join("assets", "fonts", "MINDCONTROL.ttf"))
-        try:
-            self.font = pg.font.Font(font_path, 24)
-        except FileNotFoundError:
-            self.font = pg.font.Font(None, 24)
+        self.font = get_font(DEFAULT_FONT_NAME, 24)
 
         # Liste du texte à afficher
         self.text_list = [

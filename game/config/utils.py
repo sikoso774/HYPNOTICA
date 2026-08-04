@@ -45,18 +45,5 @@ def display_text_center(surface, text, color, y, font_path=None, font_size=None)
     police_font = get_font(font_path, font_size)
 
     text_surf = police_font.render(text, True, color)
-    texte_rect = text_surf.get_rect(center=(WIDTH // 2, y)) 
+    texte_rect = text_surf.get_rect(center=(WIDTH // 2, y))
     surface.blit(text_surf, texte_rect)
-
-def get_resource_path(relative_path):
-    """
-    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
-    (si l'exe est compilé) et le développement standard.
-    """
-    try:
-        # PyInstaller crée un dossier temporaire et stocke le chemin dans _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)

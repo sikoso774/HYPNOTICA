@@ -36,17 +36,13 @@ This is the active gameplay path, wired up as `Level_3D` (`game/core/levels/leve
 
 All raycasting math constants (`FOV`, `NUM_RAYS`, `MAX_DEPTH`, `SCREEN_DIST`, `TILE_SIZE`, etc.) live in `game/config/settings.py` and are derived from `WIDTH`/`HEIGHT` at import time — changing `WIDTH`/`HEIGHT` requires these derived constants to stay consistent, so edit them in settings.py rather than overriding downstream.
 
-### Legacy 2D level (`game/core/levels/level.py`)
-
-`Level` (not `Level_3D`) is the original top-down gameplay screen using `game/components/sprites/` (`Player`, `Phone`, `Background`, `AllSprites`) and a `Satiety` meter as the win/lose condition. It's still present and exported but is no longer wired into `main.py`'s state machine — `Level_3D` is the one actually played. Check which one an instruction refers to before editing "the level".
-
 ### Config (`game/config/`)
 
 `game/config/__init__.py` re-exports `settings.py` (constants, colors, paths), `utils.py` (`get_resource_path` for PyInstaller-compatible asset paths, `get_font` with a module-level font cache, `display_text_center`), and `sound.py` (`Sound`, keyed music/SFX dictionaries, resolves files under `assets/audio/`). Most other modules do `from game.config import *` or `from game.config.settings import *`, so new constants should go in `settings.py` to stay consistent with existing imports.
 
 ### Components (`game/components/`)
 
-Used by the legacy `Level` screen and by `MainMenu`: per-screen layout constants (`components/constants/`), UI elements (`Button`, `Satiety` bar, `TextScroller`), and sprites (`sprites/sprites.py`, `sprites/groups.py` for `AllSprites`, `sprites/animation_gif.py` for `Animation_GIF` used as the main-menu background).
+Used by `MainMenu` and `GameOver`: per-screen layout constants (`components/constants/`), UI elements (`Button`, `TextScroller`), and `sprites/animation_gif.py` (`Animation_GIF`, used for the main-menu GIF background).
 
 ### Assets
 
@@ -54,5 +50,5 @@ Used by the legacy `Level` screen and by `MainMenu`: per-screen layout constants
 
 ## Notes
 
-- `debug.py` (gitignored) is a personal interactive screen-picker script for jumping directly to any screen; it currently imports `from game.game import Game`, which does not exist (`Game` actually lives in `main.py`) — treat it as stale/non-functional rather than a reference for the real import path.
-- `others/` and `backups/` are gitignored scratch/backup directories, not part of the shipped code.
+- `debug.py` (gitignored) is a personal interactive screen-picker script for jumping directly to any screen; it imports `Game` from `main.py` (the top-level entry point, not `game/game.py` which doesn't exist).
+- `others/` and `backups/` are gitignored scratch/backup directories, not part of the shipped code. The original 2D top-down prototype (`Level` screen, `game/components/sprites/sprites.py`, `sprites/groups.py` (`AllSprites`), `elements/satiety.py` (`Satiety`)) was moved to `others/legacy_2d_level/` once `Level_3D` (raycasting) became the only playable path — kept on disk for reference, no longer part of the active codebase or import graph.

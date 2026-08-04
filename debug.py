@@ -3,7 +3,7 @@ import sys
 from game.config.settings import WIDTH, HEIGHT
 
 # Main Class
-from game.game import Game
+from main import Game
 
 # Screens imports
 from game.core.screens import *

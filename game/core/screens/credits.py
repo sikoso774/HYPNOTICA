@@ -51,17 +51,13 @@ class Credits(BaseScreen):
         # [Votre code existant...]
         prepared_list = []
         loaded_images = self._load_images()
-        font_path = get_resource_path(DEFAULT_FONT_NAME) # Assurez-vous d'utiliser get_resource_path
-        
+
         for item in self.credit_data:
             # ... (Copiez le contenu de votre fonction existante) ...
             prepared_item = {'type': item['type']}
             if item['type'] == 'text':
                 font_size = item.get('font_size', 36)
-                try:
-                    current_font = pg.font.Font(font_path, font_size)
-                except:
-                    current_font = pg.font.Font(None, font_size)
+                current_font = get_font(DEFAULT_FONT_NAME, font_size)
 
                 text_surf = current_font.render(item['value'], True, item.get('color', COLORS['white']))
                 prepared_item['surface'] = text_surf
