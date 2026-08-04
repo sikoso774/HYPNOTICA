@@ -37,28 +37,29 @@ CREDITS_CONTENT = [
     {'type': 'text', 'value': "Press M to Main Menu", 'font_size': 24, 'color': COLORS['blue']},
 ]
 
+
 class Credits(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
         self.music_name = 'credits'
-        
+
         self.credit_data = CREDITS_CONTENT
         self.scrolling_speed = 1.5
-        
+
         # Préparation du contenu
         self.prepare_credits = self._prepare_credits()
-        
+
         # Calcul de la hauteur
         _, self.screen_h = self.screen.get_size()
         self.total_height = sum(item['height'] for item in self.prepare_credits) + self.screen_h * 0.1
-        
+
         # Initialisation de la variable (sera reset dans run)
         self.credits_y = self.screen_h
 
     # --- AJOUTEZ CETTE MÉTHODE ICI ---
     def run(self):
         """
-        Surcharge de run() : 
+        Surcharge de run() :
         On remet le texte en bas de l'écran avant de lancer la boucle.
         """
         self.credits_y = self.screen_h  # RESET : Retour au départ
@@ -106,7 +107,7 @@ class Credits(BaseScreen):
                     prepared_item['height'] = 0
             elif item['type'] == 'spacer':
                 prepared_item['height'] = item.get('height', 0)
-            
+
             prepared_list.append(prepared_item)
         return prepared_list
 
@@ -125,29 +126,29 @@ class Credits(BaseScreen):
         # Si tout est passé, on peut soit boucler, soit revenir au menu automatiquement
         if self.credits_y < -self.total_height:
              # Option A : Boucle infinie
-             self.credits_y = self.screen_h 
-             
+             self.credits_y = self.screen_h
+
              # Option B : Retour automatique au menu (décommentez ci-dessous)
              # return "menu"
 
     def draw(self):
         self.screen.fill(COLORS['black'])
         y_offset = self.credits_y
-        
+
         center_x = self.screen.get_width() // 2
-        
+
         for item in self.prepare_credits:
             if item['type'] == 'text':
                 text_surf = item['surface']
                 text_rect = text_surf.get_rect(center=(center_x, y_offset))
                 self.screen.blit(text_surf, text_rect)
                 y_offset += item['height']
-                
+
             elif item['type'] == 'image':
                 image = item['surface']
                 image_rect = image.get_rect(center=(center_x, y_offset + image.get_height() // 2))
                 self.screen.blit(image, image_rect)
                 y_offset += item['height']
-                
+
             elif item['type'] == 'spacer':
                 y_offset += item['height']

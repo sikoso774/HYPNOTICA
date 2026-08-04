@@ -4,6 +4,7 @@ from game.config import *
 from game.components import Button, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_SPACING
 from game.core.screens import BaseScreen # Import de la nouvelle classe mère
 
+
 class GameOver(BaseScreen):
     def __init__(self, game):
         super().__init__(game) # Initialisation du parent

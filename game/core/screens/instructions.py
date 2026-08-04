@@ -16,20 +16,21 @@ INSTRUCTIONS_CONTENT = [
     {'type': 'text', 'value': "Press SPACE to return to the main menu.", 'font-size': 25, 'color': COLORS['white']},
 ]
 
+
 class Instructions(BaseScreen):
     def __init__(self, game):
-        super().__init__(game)        
+        super().__init__(game)
         self.instruction_data = INSTRUCTIONS_CONTENT
-        
+
         # Variables animation
         self.current_char_index = 0
         self.last_char_time = 0
-        self.typing_speed = 30 
+        self.typing_speed = 30
         self.total_chars = 0
-        
+
         self.prepared_items = []
         self._prepare_content()
-        
+
         # Reset pour l'animation au démarrage
         self.last_char_time = pg.time.get_ticks()
 
@@ -53,7 +54,7 @@ class Instructions(BaseScreen):
                     'length': len(item['value'])
                 })
                 self.total_chars += len(item['value'])
-                current_y += font.get_height() + 10 
+                current_y += font.get_height() + 10
             elif item['type'] == 'spacer':
                 current_y += item.get('height', 20)
 
@@ -85,9 +86,8 @@ class Instructions(BaseScreen):
                     # Combien de caractères de cette ligne afficher ?
                     char_limit = min(self.current_char_index - item['start_index'], item['length'])
                     text_to_render = item['full_text'][:char_limit]
-                    
+
                     surf = item['font'].render(text_to_render, True, item['color'])
                     rect = surf.get_rect(center=(WIDTH // 2, item['y']))
                     self.screen.blit(surf, rect)
-    
-    
+

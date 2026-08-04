@@ -2,6 +2,7 @@ import pygame as pg
 import math
 from ..config.settings import *
 
+
 class Player:
     def __init__(self, game):
         self.game = game
@@ -12,9 +13,9 @@ class Player:
         sin_a = math.sin(self.angle)
         cos_a = math.cos(self.angle)
         dx, dy = 0, 0
-        
+
         # Utilisation de self.game.dt pour l'indépendance du framerate
-        speed = PLAYER_SPEED * self.game.dt 
+        speed = PLAYER_SPEED * self.game.dt
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 

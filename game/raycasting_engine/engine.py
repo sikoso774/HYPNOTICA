@@ -2,6 +2,7 @@ import pygame as pg
 import math
 from game.config.settings import *
 
+
 class RayCasting:
     def __init__(self, game):
         self.game = game
@@ -31,9 +32,9 @@ class RayCasting:
     def ray_cast(self):
         ox, oy = self.game.player.pos
         x_map, y_map = self.game.player.map_pos
-        
+
         ray_angle = self.game.player.angle - HALF_FOV + 0.0001
-        
+
         for ray in range(NUM_RAYS):
             sin_a = math.sin(ray_angle)
             cos_a = math.cos(ray_angle)
@@ -42,7 +43,7 @@ class RayCasting:
             y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
             depth_hor = (y_hor - oy) / sin_a
             x_hor = ox + depth_hor * cos_a
-            
+
             delta_depth = dy / sin_a
             dx = delta_depth * cos_a
 

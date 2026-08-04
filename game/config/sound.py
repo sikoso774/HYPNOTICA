@@ -2,11 +2,12 @@ import pygame as pg
 from os.path import join
 from game.config import get_resource_path
 
+
 class Sound:
     def __init__(self, game):
         self.game = game
         pg.mixer.init()
-        
+
         # Définition des chemins de base
         self.audio_dir = get_resource_path(join("assets", "audio"))
         self.sfx_dir = get_resource_path(join("assets", "audio", "sounds"))
@@ -20,7 +21,7 @@ class Sound:
             'game': "DEAF KEV - Invincible [NCS Release].mp3"
             # Ajoutez d'autres pistes ici si nécessaire
         }
-        
+
         # Chargement des effets sonores (SFX)
         self.sfx = {}
         self._load_sfx()
@@ -34,7 +35,7 @@ class Sound:
             'confirm': "yes_clicked.wav"
             # Ajoutez vos bruitages ici (tir, saut, etc.)
         }
-        
+
         for name, filename in sfx_files.items():
             path = join(self.sfx_dir, filename)
             try:
@@ -45,7 +46,7 @@ class Sound:
 
     def play_music(self, track_key):
         """
-        Lance une musique. 
+        Lance une musique.
         Si la musique demandée joue déjà, on ne fait rien (transition fluide).
         """
         if track_key not in self.music_tracks:

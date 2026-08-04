@@ -17,6 +17,7 @@ mini_map = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
+
 class Map:
     def __init__(self, game):
         self.game = game
@@ -25,7 +26,7 @@ class Map:
         self.rows = len(self.mini_map)
         self.cols = len(self.mini_map[0])
         self.get_map()
-    
+
     def get_map(self):
         # On remplit le dictionnaire world_map avec les murs
         for j, row in enumerate(self.mini_map):
@@ -36,6 +37,6 @@ class Map:
     def draw(self):
         # Fonction de débogage : dessine les murs en 2D (vue de dessus)
         # On utilise TILE_SIZE défini dans tes settings
-        [pg.draw.rect(self.game.screen, 'darkgray', 
+        [pg.draw.rect(self.game.screen, 'darkgray',
                       (pos[0] * TILE_SIZE, pos[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 2)
          for pos in self.world_map]

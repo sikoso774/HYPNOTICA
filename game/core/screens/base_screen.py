@@ -3,6 +3,7 @@ import pygame as pg
 import sys
 from game.config import FPS
 
+
 class BaseScreen:
     def __init__(self, game):
         self.game = game
@@ -16,7 +17,7 @@ class BaseScreen:
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 self.quit_game()
-            
+
             # Hook pour les classes enfants (ex: appuie sur une touche)
             action = self.on_event(event)
             if action:
@@ -57,7 +58,7 @@ class BaseScreen:
 
             # 3. Draw
             self.draw()
-            
+
             # 4. Update
             pg.display.flip()
             self.clock.tick(FPS)

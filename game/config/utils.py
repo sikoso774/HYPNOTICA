@@ -1,14 +1,14 @@
 import os
 import sys
 import pygame as pg
-from .settings import * 
+from .settings import *
 
 # Cache pour stocker les objets police
 _font_cache = {}
 
 def get_resource_path(relative_path):
     """
-    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller 
+    Retourne le chemin absolu d'une ressource, compatible avec PyInstaller
     (si l'exe est compilé) et le développement standard.
     """
     try:
@@ -32,7 +32,7 @@ def get_font(font_path, size):
             _font_cache[font_key] = pg.font.Font(abs_font_path, final_font_size)
         except Exception as e:
             print(f"Erreur de chargement de la police: {e}")
-            _font_cache[font_key] = pg.font.SysFont(None, final_font_size) 
+            _font_cache[font_key] = pg.font.SysFont(None, final_font_size)
 
     return _font_cache[font_key]
 

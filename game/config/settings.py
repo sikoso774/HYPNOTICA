@@ -25,22 +25,22 @@ COLORS = {
     'white': (255, 255, 255),
     'black': (0, 0, 0),
     'gray': (100, 100, 100),
-        
+
     # RGB
     'red': (255, 0, 0),
     'green': (0, 255, 0),
     'blue': (0, 0, 255),
-        
+
     # Secondary solors
     'cyan': (0, 255, 255),
     'magenta': (255, 0, 255),
     'yellow': (255, 255, 0),
-        
+
     # Others colors
     'dark_gray': (50, 50, 50),
     'orange': (181, 83, 38),
     'purple': (127, 0, 255),
-        
+
     # Personal colors
     'ui_text': (255, 255, 255),
     'ui_hover': (200, 200, 200),
@@ -62,7 +62,7 @@ PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
 
-# Phone settings 
+# Phone settings
 PHONE_DATA = {
     'size': 30,
     'speed': 200,

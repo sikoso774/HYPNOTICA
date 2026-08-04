@@ -3,6 +3,7 @@ from os.path import join
 from game.config import *
 from .base_screen import BaseScreen
 
+
 class Intro(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
@@ -10,14 +11,14 @@ class Intro(BaseScreen):
 
         # Configuration des durées
         self.DURATION = 3000      # Temps par image
-        self.FADE_DURATION = 1000 
+        self.FADE_DURATION = 1000
         self.ALPHA_SPEED = 255 / self.FADE_DURATION
-        
+
         # Textes
         self.text_logo = "HYPNOTICA"
         self.text_dev = "Sikoso774"
         self._init_fonts()
-        
+
         # Chargement des images
         images_data = [
             ("Zoléni_Cyberpunk.jpg", (0.5, 0.5)),
@@ -41,14 +42,14 @@ class Intro(BaseScreen):
             try:
                 path = get_resource_path(join("assets", "images", filename))
                 img = pg.image.load(path).convert_alpha()
-                
+
                 # Redimensionnement proportionnel
                 target_w = int(WIDTH * fx)
                 target_h = int(HEIGHT * fy)
                 img_w, img_h = img.get_size()
                 ratio = min(target_w / img_w, target_h / img_h)
                 new_size = (int(img_w * ratio), int(img_h * ratio))
-                
+
                 img = pg.transform.scale(img, new_size)
                 self.images.append(img)
             except Exception as e:
@@ -83,22 +84,22 @@ class Intro(BaseScreen):
                 # Mais BaseScreen n'a pas prévu de retour automatique sans event.
                 # On va modifier légèrement BaseScreen ou utiliser une astuce ici.
                 # Le plus propre : simuler une action de retour.
-                return "menu" 
-            
+                return "menu"
+
             # Reset pour la prochaine image
             self.phase_start_time = current_time
 
     def draw(self):
-        # Attention : si update() a détecté la fin, image_index peut être hors limite 
+        # Attention : si update() a détecté la fin, image_index peut être hors limite
         # le temps d'une frame avant que run() ne retourne. Sécurité :
         if self.image_index >= len(self.images):
             return
 
         self.screen.fill(COLORS['black'])
-        
+
         current_img = self.images[self.image_index]
         elapsed = pg.time.get_ticks() - self.phase_start_time
-        
+
         # 1. Calcul Alpha Image (Fade In / Static / Fade Out)
         alpha_img = 255
         if elapsed < self.DURATION / 3: # Fade In
@@ -117,7 +118,7 @@ class Intro(BaseScreen):
         if elapsed > self.DURATION / 3:
             alpha_txt1 = int((elapsed - self.DURATION / 3) * self.ALPHA_SPEED)
             alpha_txt1 = max(0, min(255, alpha_txt1))
-        
+
         surf_logo = self.font_logo.render(self.text_logo, True, COLORS['white'])
         surf_logo.set_alpha(alpha_txt1)
         rect_logo = surf_logo.get_rect(center=(WIDTH // 2, HEIGHT // 6))
@@ -128,7 +129,7 @@ class Intro(BaseScreen):
         if elapsed > 2 * self.DURATION / 3:
             alpha_txt2 = int((elapsed - 2 * self.DURATION / 3) * self.ALPHA_SPEED)
             alpha_txt2 = max(0, min(255, alpha_txt2))
-            
+
         surf_dev = self.font_dev.render(self.text_dev, True, COLORS['white'])
         surf_dev.set_alpha(alpha_txt2)
         rect_dev = surf_dev.get_rect(center=(WIDTH // 2, HEIGHT - 100))

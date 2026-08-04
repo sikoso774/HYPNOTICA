@@ -13,14 +13,15 @@ BUTTONS_MENU = [
     {'text': 'QUITTER', 'action': 'quit', 'y_offset': START_Y + (BUTTON_HEIGHT + BUTTON_SPACING) * 3},
 ]
 
+
 class MainMenu(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
         self.music_name = 'menu'  # Référence à la clé dans SoundHandler
 
         # 1. Assets (GIF)
-        GIF_PATH = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
-        self.gif_animator = AnimationGif(GIF_PATH, self.screen)
+        gif_path = get_resource_path(join(IMAGES_DIR, "hypnose_frames"))
+        self.gif_animator = AnimationGif(gif_path, self.screen)
 
         # 2. Boutons
         self.buttons = []
@@ -40,11 +41,11 @@ class MainMenu(BaseScreen):
             if action:
                 self.sound.play_sfx('click') # Petit bonus : son de clic !
                 return action
-        
+
         # Raccourci clavier (Q pour quitter)
         if event.type == pg.KEYDOWN and event.key == pg.K_q:
             self.quit_game()
-            
+
         return None
 
     def update(self):
@@ -55,13 +56,13 @@ class MainMenu(BaseScreen):
         # 1. Fond (GIF)
         frame_index = self.gif_animator.animation_frame
         self.screen.blit(self.gif_animator.frames[frame_index], (0, 0))
-        
+
         # 2. Textes
         center_text(self.screen, "HYPNOTICA", COLORS['white'], self.screen.get_height() // 4,
                     font_path=get_resource_path(DEFAULT_FONT_NAME))
-        center_text(self.screen, "Zoléni KOKOLO ZASSI - 2025", COLORS['white'], 
+        center_text(self.screen, "Zoléni KOKOLO ZASSI - 2025", COLORS['white'],
                     self.screen.get_height() // 4 + 50, font_size=28)
-        
+
         # 3. Boutons
         for button in self.buttons:
             button.draw(self.screen, self.gif_animator.frames[frame_index])
