@@ -16,11 +16,6 @@ class Intro(BaseScreen):
         self.FADE_DURATION = 1000
         self.ALPHA_SPEED = 255 / self.FADE_DURATION
 
-        # Texts
-        self.text_logo = "HYPNOTICA"
-        self.text_dev = "Sikoso774"
-        self._init_fonts()
-
         # Loading images
         images_data = [
             ("Zoléni_Cyberpunk.jpg", (0.5, 0.5)),
@@ -34,10 +29,6 @@ class Intro(BaseScreen):
         self.image_index = 0
         self.phase_start_time = 0
         self.sequence_finished = False
-
-    def _init_fonts(self):
-        self.font_logo = get_font(DEFAULT_FONT_NAME, 48)
-        self.font_dev = get_font(DEFAULT_FONT_NAME, 36)
 
     def _load_images(self, data):
         for filename, (fx, fy) in data:
@@ -65,9 +56,9 @@ class Intro(BaseScreen):
         return super().run()
 
     def on_event(self, event):
-        # Allows skipping the intro with Space or Escape
+        # Allows skipping the intro with Space, Enter or Escape
         if event.type == pg.KEYDOWN:
-            if event.key == pg.K_SPACE or event.key == pg.K_ESCAPE:
+            if event.key in (pg.K_SPACE, pg.K_RETURN, pg.K_KP_ENTER, pg.K_ESCAPE):
                 self.sound.play_sfx('confirm')
                 return "menu"
         return None
@@ -102,7 +93,7 @@ class Intro(BaseScreen):
         current_img = self.images[self.image_index]
         elapsed = pg.time.get_ticks() - self.phase_start_time
 
-        # 1. Image Alpha Calculation (Fade In / Static / Fade Out)
+        # Image Alpha Calculation (Fade In / Static / Fade Out)
         alpha_img = 255
         if elapsed < self.DURATION / 3: # Fade In
             alpha_img = int(elapsed * self.ALPHA_SPEED)
@@ -114,25 +105,3 @@ class Intro(BaseScreen):
         temp_img.set_alpha(alpha_img)
         rect = temp_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         self.screen.blit(temp_img, rect)
-
-        # 2. Logo Text (delayed Fade In)
-        alpha_txt1 = 0
-        if elapsed > self.DURATION / 3:
-            alpha_txt1 = int((elapsed - self.DURATION / 3) * self.ALPHA_SPEED)
-            alpha_txt1 = max(0, min(255, alpha_txt1))
-
-        surf_logo = self.font_logo.render(self.text_logo, True, COLORS['white'])
-        surf_logo.set_alpha(alpha_txt1)
-        rect_logo = surf_logo.get_rect(center=(WIDTH // 2, HEIGHT // 6))
-        self.screen.blit(surf_logo, rect_logo)
-
-        # 3. Dev Text (even more delayed Fade In)
-        alpha_txt2 = 0
-        if elapsed > 2 * self.DURATION / 3:
-            alpha_txt2 = int((elapsed - 2 * self.DURATION / 3) * self.ALPHA_SPEED)
-            alpha_txt2 = max(0, min(255, alpha_txt2))
-
-        surf_dev = self.font_dev.render(self.text_dev, True, COLORS['white'])
-        surf_dev.set_alpha(alpha_txt2)
-        rect_dev = surf_dev.get_rect(center=(WIDTH // 2, HEIGHT - 100))
-        self.screen.blit(surf_dev, rect_dev)
