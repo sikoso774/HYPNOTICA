@@ -4,6 +4,7 @@ from .screens.instructions import Instructions
 from .screens.mainmenu import MainMenu
 from .screens.game_over import GameOver
 from .screens.credits import Credits
+from .screens.level_complete import LevelComplete
 
 from .levels.level_3d import Level3D
 from .levels.world_map import WorldMap

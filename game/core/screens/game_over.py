@@ -4,6 +4,12 @@ from game.config import *
 from game.components import Button, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_SPACING
 from game.core.screens import BaseScreen # Import of the new parent class
 
+# Death flavor text, keyed by Game.game_over_reason (set by Level3D)
+REASON_TEXT = {
+    'caught': "Elle t'a trouve dans le noir.",
+    'timeout': "Le temps s'est ecoule.",
+}
+
 
 class GameOver(BaseScreen):
     """The game-over screen, shown when the level timer runs out."""
@@ -32,6 +38,7 @@ class GameOver(BaseScreen):
 
     def _load_fonts(self):
         self.font_title = get_font(DEFAULT_FONT_NAME, 64)
+        self.font_subtitle = get_font(BODY_FONT_NAME, 20)
 
     def _build_buttons(self):
         center_x = WIDTH // 2 - BUTTON_WIDTH // 2
@@ -78,6 +85,12 @@ class GameOver(BaseScreen):
         title_surf = self.font_title.render("GAME OVER", True, COLORS['white'])
         title_rect = title_surf.get_rect(center=(WIDTH // 2, HEIGHT // 4))
         self.screen.blit(title_surf, title_rect)
+
+        reason = getattr(self.game, 'game_over_reason', 'timeout')
+        subtitle_surf = self.font_subtitle.render(REASON_TEXT.get(reason, REASON_TEXT['timeout']),
+                                                    True, (144, 131, 171))
+        subtitle_rect = subtitle_surf.get_rect(center=(WIDTH // 2, HEIGHT // 4 + 55))
+        self.screen.blit(subtitle_surf, subtitle_rect)
 
         # 3. Buttons
         for button in self.buttons:
