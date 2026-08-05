@@ -56,7 +56,10 @@ class MainMenu(BaseScreen):
         try:
             return super().run()
         finally:
-            pg.mouse.set_visible(True)
+            # quit_game() may have already called pg.quit() (e.g. via ESC);
+            # touching pg.mouse after that raises "video system not initialized".
+            if pg.display.get_init():
+                pg.mouse.set_visible(True)
 
     def on_event(self, event):
         # Handle button clicks
