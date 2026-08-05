@@ -37,6 +37,13 @@ def get_font(font_path, size):
     return _font_cache[font_key]
 
 
+def clear_font_cache():
+    """Drops all cached Font objects. Needed after a pygame.quit()/pygame.init()
+    cycle: cached Font objects stay bound to the destroyed font context and
+    become unusable, even though their (path, size) key looks unchanged."""
+    _font_cache.clear()
+
+
 def display_text_center(surface, text, color, y, font_path=None, font_size=None):
     """
     Displays horizontally centered text on the screen.
