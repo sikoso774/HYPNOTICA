@@ -3,7 +3,7 @@ import sys
 
 # Game config
 from game.config import *
-from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level3D, WorldMap
+from game.core import Intro, MainMenu, Instructions, GameOver, Credits, Level3D, WorldMap, LevelComplete
 
 
 class Game:
@@ -27,6 +27,7 @@ class Game:
         self.game_over = GameOver(self)
         self.instruction = Instructions(self)
         self.credits = Credits(self)
+        self.level_complete = LevelComplete(self)
 
     def update(self):
         action = None
@@ -48,6 +49,9 @@ class Game:
 
         elif self.current_state == 'game_over':
             action = self.game_over.run()
+
+        elif self.current_state == 'level_complete':
+            action = self.level_complete.run()
 
         # --- Transition handling ---
         if action == 'quit':

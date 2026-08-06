@@ -19,9 +19,9 @@ NODES = [
 ]
 
 CENTER = (WIDTH // 2, 260)
-R_MAX = 170
+R_MAX = 190
 R_MIN = 40
-THETA_END = math.pi * 3.2
+THETA_END = math.pi * 2.5
 NODE_RADIUS = 20
 LABEL_OFFSET = 28
 
@@ -32,6 +32,14 @@ SELECTED_COLOR = COLORS['green']
 DIM_TEXT_COLOR = (144, 131, 171)
 PANEL_BG = (21, 15, 36)
 
+PULSE_AMPLITUDE = 3
+PULSE_SPEED = 0.005
+CURSOR_COLOR = COLORS['green']
+CURSOR_RADIUS = 6
+
+TRANSITION_DURATION_MS = 700
+TRANSITION_ZOOM_MAX = 0.5
+
 
 class WorldMap(BaseScreen):
     """Super Mario World-style level-select screen: nodes placed along a spiral path."""
@@ -39,18 +47,27 @@ class WorldMap(BaseScreen):
     def __init__(self, game):
         super().__init__(game)
         self.font_title = get_font(DEFAULT_FONT_NAME, 34)
-        self.font_node = get_font(DEFAULT_FONT_NAME, 14)
-        self.font_label = get_font(DEFAULT_FONT_NAME, 13)
-        self.font_panel_name = get_font(DEFAULT_FONT_NAME, 20)
-        self.font_panel_text = get_font(DEFAULT_FONT_NAME, 14)
+        self.font_node = get_font(BODY_FONT_BOLD_NAME, 14)
+        self.font_label = get_font(BODY_FONT_NAME, 13)
+        self.font_panel_name = get_font(BODY_FONT_BOLD_NAME, 20)
+        self.font_panel_text = get_font(BODY_FONT_NAME, 14)
         self._build_path()
         self._place_nodes()
         self.selected = 0
+        self.transitioning = False
 
     def run(self):
         """Always restarts on the first depth when entering the map."""
         self.selected = 0
-        return super().run()
+        self.transitioning = False
+        pg.mouse.set_visible(False)
+        try:
+            return super().run()
+        finally:
+            # quit_game() may have already called pg.quit() (e.g. via ESC);
+            # touching pg.mouse after that raises "video system not initialized".
+            if pg.display.get_init():
+                pg.mouse.set_visible(True)
 
     # --- Spiral geometry ---
 
@@ -103,6 +120,8 @@ class WorldMap(BaseScreen):
     # --- Inputs ---
 
     def on_event(self, event):
+        if self.transitioning:
+            return None
         if event.type == pg.KEYDOWN:
             if event.key in (pg.K_DOWN, pg.K_RIGHT):
                 self._move_selection(1)
@@ -144,7 +163,19 @@ class WorldMap(BaseScreen):
         if node['locked']:
             return None
         self.sound.play_sfx('confirm')
-        return node['action']
+        self.transitioning = True
+        self.transition_start = pg.time.get_ticks()
+        self.transition_action = node['action']
+        self.transition_node_pos = node['pos']
+        return None
+
+    def update(self):
+        """While transitioning, hand the pending action back once the vortex animation ends."""
+        if self.transitioning:
+            elapsed = pg.time.get_ticks() - self.transition_start
+            if elapsed >= TRANSITION_DURATION_MS:
+                return self.transition_action
+        return None
 
     # --- Rendering ---
 
@@ -165,6 +196,10 @@ class WorldMap(BaseScreen):
 
         self._draw_panel()
         self._draw_hints()
+        self._draw_cursor()
+
+        if self.transitioning:
+            self._draw_transition()
 
     def _draw_node(self, index, node):
         x, y = node['pos']
@@ -179,7 +214,11 @@ class WorldMap(BaseScreen):
             fill_color = (35, 20, 56)
 
         pg.draw.circle(self.screen, fill_color, pos, NODE_RADIUS)
-        pg.draw.circle(self.screen, ring_color, pos, NODE_RADIUS, 2)
+        if selected:
+            pulse = math.sin(pg.time.get_ticks() * PULSE_SPEED) * PULSE_AMPLITUDE
+            pg.draw.circle(self.screen, ring_color, pos, NODE_RADIUS + pulse, 3)
+        else:
+            pg.draw.circle(self.screen, ring_color, pos, NODE_RADIUS, 2)
 
         if node['locked']:
             self._draw_lock_icon(x, y)
@@ -239,3 +278,34 @@ class WorldMap(BaseScreen):
         hint_surf = self.font_panel_text.render(hint_text, True, LOCKED_COLOR)
         hint_rect = hint_surf.get_rect(center=(WIDTH // 2, HEIGHT - 16))
         self.screen.blit(hint_surf, hint_rect)
+
+    def _draw_transition(self):
+        """Vortex-style outro: the frame gets pulled/zoomed into the chosen node
+        while a black iris closes in on that same point, converging together."""
+        elapsed = pg.time.get_ticks() - self.transition_start
+        t = min(1.0, elapsed / TRANSITION_DURATION_MS)
+        eased = t * t  # ease-in: the pull accelerates towards the end
+
+        nx, ny = self.transition_node_pos
+        zoom = 1.0 + TRANSITION_ZOOM_MAX * eased
+        w, h = self.screen.get_size()
+        scaled = pg.transform.smoothscale(self.screen, (int(w * zoom), int(h * zoom)))
+        offset = (nx * (1 - zoom), ny * (1 - zoom))
+        self.screen.blit(scaled, offset)
+
+        overlay = pg.Surface((w, h), pg.SRCALPHA)
+        overlay.fill((0, 0, 0, 255))
+        max_radius = math.hypot(w, h)
+        radius = max_radius * (1 - eased)
+        if radius > 0:
+            pg.draw.circle(overlay, (0, 0, 0, 0), (int(nx), int(ny)), int(radius))
+        self.screen.blit(overlay, (0, 0))
+
+    def _draw_cursor(self):
+        """Custom crosshair cursor, drawn in place of the OS arrow to fit the theme."""
+        x, y = pg.mouse.get_pos()
+        pg.draw.circle(self.screen, CURSOR_COLOR, (x, y), CURSOR_RADIUS, 1)
+        pg.draw.line(self.screen, CURSOR_COLOR, (x - CURSOR_RADIUS - 4, y), (x - 2, y), 1)
+        pg.draw.line(self.screen, CURSOR_COLOR, (x + 2, y), (x + CURSOR_RADIUS + 4, y), 1)
+        pg.draw.line(self.screen, CURSOR_COLOR, (x, y - CURSOR_RADIUS - 4), (x, y - 2), 1)
+        pg.draw.line(self.screen, CURSOR_COLOR, (x, y + 2), (x, y + CURSOR_RADIUS + 4), 1)

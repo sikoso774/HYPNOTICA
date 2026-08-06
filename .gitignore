@@ -32,4 +32,4 @@ others/
 *.xlsx
 
 # Fichier de débogage
-debug.py
+debug/

@@ -18,6 +18,8 @@ IMAGES_DIR = os.path.join(ASSETS_DIR, "images")
 FONTS_DIR = os.path.join(ASSETS_DIR, "fonts")
 
 DEFAULT_FONT_NAME = os.path.join(FONTS_DIR, "MINDCONTROL.ttf")
+BODY_FONT_NAME = os.path.join(FONTS_DIR, "ChakraPetch-Regular.ttf")
+BODY_FONT_BOLD_NAME = os.path.join(FONTS_DIR, "ChakraPetch-SemiBold.ttf")
 
 # --- Colors (Global Palette) ---
 # global colors palette

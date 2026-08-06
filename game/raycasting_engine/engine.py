@@ -19,6 +19,7 @@ class RayCasting:
         palette = {
             1: ((140, 90, 60), (110, 70, 45)),   # terracotta
             2: ((90, 100, 110), (70, 80, 90)),   # gray stone
+            3: ((127, 0, 255), (80, 0, 170)),    # glowing exit marker (purple)
         }
         return {wall_id: self._make_striped_texture(*colors) for wall_id, colors in palette.items()}
 
@@ -114,6 +115,9 @@ class RayCasting:
             brightness = 255 / (1 + depth ** 5 * 0.00002)
             if is_vertical_hit:
                 brightness *= 0.85
+            if wall_id == 3:
+                # The exit marker breathes gently so it reads as a landmark from afar.
+                brightness *= 0.75 + 0.25 * math.sin(pg.time.get_ticks() * 0.004)
             brightness = max(0, min(255, brightness))
 
             texture = self.wall_textures.get(wall_id)

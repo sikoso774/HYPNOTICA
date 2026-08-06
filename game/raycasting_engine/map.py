@@ -3,7 +3,7 @@ from game.config import * # Make sure the import path is correct for your struct
 
 _ = False
 # Keeping your mini_map as defined in your file
-# (wall_id 1 = terracotta, 2 = gray stone -- see RayCasting._load_wall_textures)
+# (wall_id 1 = terracotta, 2 = gray stone, 3 = glowing exit marker -- see RayCasting._load_wall_textures)
 mini_map = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, _, _, 1, _, _, _, _, _, _, 1, _, _, _, _, _, 1],
@@ -12,10 +12,13 @@ mini_map = [
         [1, 1, _, _, _, _, _, _, _, _, _, _, _, _, _, _, 1],
         [1, _, _, _, _, _, _, _, _, _, 2, 2, 2, 2, _, _, 1],
         [1, _, 1, _, _, _, _, _, _, _, _, _, _, _, _, _, 1],
-        [1, _, 1, _, _, 2, _, _, _, _, _, _, _, _, _, _, 1],
-        [1, _, 1, _, _, 2, _, _, _, _, _, _, _, 1, _, _, 1],
+        [1, _, 1, _, _, 2, _, _, _, _, _, _, _, _, _, _, 3],
+        [1, _, 1, _, _, 2, _, _, _, _, _, _, _, 1, _, _, 3],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
+
+# Open floor tile facing the glowing exit marker on the right border wall.
+EXIT_POS = (15, 7)
 
 
 class Map:
